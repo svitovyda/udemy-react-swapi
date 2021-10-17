@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Create 0 React App",
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "es6"], // "esnext"
+    "module": "commonjs", // "esnext"
+    "target": "es5",
+    "rootDir": ".",
+    "outDir": "./lib/",
+
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react", // react-jsx
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "alwaysStrict": true,
+    "experimentalDecorators": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": false,
+    "noFallthroughCasesInSwitch": false,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "preserveConstEnums": true,
+    "stripInternal": true,
+    "declaration": true,
+    "downlevelIteration": true
+  },
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["node_modules", "build", "lib", "**/*.spec.ts"]
+}

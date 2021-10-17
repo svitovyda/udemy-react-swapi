@@ -1,0 +1,6 @@
+{
+  "count": 60,
+  "next": "https://swapi.dev/api/planets/?page=3",
+  "previous": "https://swapi.dev/api/planets/?page=1",
+  "results": []
+}
