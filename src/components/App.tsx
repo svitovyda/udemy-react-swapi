@@ -1,6 +1,6 @@
 import * as React from "react";
-import { TestComponent } from "./TestComponent";
-import { SwapiService } from "./services/SwapiService";
+import { TestComponent } from "../TestComponent";
+import { SwapiService } from "../services/SwapiService";
 
 export const App: React.FC<{}> = () => {
   const service = new SwapiService();
