@@ -19,7 +19,7 @@ const mockFetcher: RemoteFetcher = {
 };
 
 describe("SwapiService", () => {
-  const service = new SwapiService(mockFetcher);
+  const service =  new SwapiService(mockFetcher);
 
   beforeAll(() => {
     const spied = jest.spyOn(mockFetcher, "get");
@@ -28,6 +28,10 @@ describe("SwapiService", () => {
       .calledWith("http://swapi.dev/api/films/")
       .mockReturnValue(films as any);
     when(spied).calledWith("http://swapi.dev/api/films/?page=2").mockRejectedValue(new Error("404, Not found"));
+    when(spied)
+      .calledWith("http://swapi.dev/api/films/1/")
+      .mockReturnValue(films.results[0] as any);
+    when(spied).calledWith("http://swapi.dev/api/films/a/").mockRejectedValue(new Error("404, Not found"));
 
     when(spied)
       .calledWith("http://swapi.dev/api/people/")
@@ -65,7 +69,10 @@ describe("SwapiService", () => {
 
   afterAll(() => {});
 
-  it("getFilms", async () => {
+  it("getFilm, getFilms", async () => {
+    await expect(service.getFilm("1")).resolves.toEqual(R.films.results[0]);
+    await expect(service.getFilm("a")).rejects.toThrow("404, Not found");
+
     await expect(service.getFilms(-2)).rejects.toThrow("Invalid page value -2: page should be intger > 0!");
     await expect(service.getFilms(0)).rejects.toThrow("Invalid page value 0: page should be intger > 0!");
     await expect(service.getFilms(10.6)).rejects.toThrow("Invalid page value 10.6: page should be intger > 0!");

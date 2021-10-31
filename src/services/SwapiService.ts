@@ -6,7 +6,8 @@ import {
   convertPeople,
   convertPlanets,
   convertStarships,
-  convertFilms
+  convertFilms,
+  convertFilm
 } from "./helpers/convert";
 import { Entity, Person, Planet, Starship, EntitiesPage, Film } from "./swapiModels";
 import * as Model from "../models/entities";
@@ -28,6 +29,7 @@ class HTTPFetcher implements RemoteFetcher {
 
 export class SwapiService {
   protected fetcher: RemoteFetcher;
+
   constructor(fetcher: RemoteFetcher = new HTTPFetcher()) {
     this.fetcher = fetcher;
   }
@@ -54,6 +56,8 @@ export class SwapiService {
     const pageProp = page !== 1 ? `?page=${page}` : "";
     return await this.getResource<EntitiesPage<T>>(`${entity}/${pageProp}`);
   };
+
+  getFilm = async (id: string): Promise<Model.Film> => this.getEntityById<Film>("films", id).then(convertFilm);
 
   getPeople = async (page: number = 1) => this.getPage<Person>("people", page).then(convertPeople(page));
 
