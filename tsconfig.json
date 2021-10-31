@@ -12,7 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "jsx": "react", // react-jsx
+    "jsx": "react",
     "moduleResolution": "node",
     "sourceMap": true,
     "removeComments": true,
@@ -36,6 +36,6 @@
     "declaration": true,
     "downlevelIteration": true
   },
-  "include": ["src/**/*", "test/**/*"],
+  "include": ["src/**/*", "test/**/*", "stories"],
   "exclude": ["node_modules", "build", "lib", "**/*.spec.ts"]
 }

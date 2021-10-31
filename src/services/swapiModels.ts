@@ -6,9 +6,9 @@ export interface Entity {
   // URL of the resource
   url: string;
   // The ISO 8601 date format of the time that this resource was created
-  created: Date;
+  created: string;
   // The ISO 8601 date format of the time that this resource was edited
-  edited: Date;
+  edited: string;
 }
 
 /**
@@ -28,7 +28,7 @@ export interface Film extends Entity {
   //The producer(s) of this film
   producer: string;
   //The release date at original creator country
-  release_date: Date;
+  release_date: string;
   //The species resources featured within this film
   species: string[];
   //The starship resources featured within this film

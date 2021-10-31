@@ -21,6 +21,7 @@ describe("convert Swapi to models helpers", () => {
   });
 
   it("convertToNumber", () => {
+    expect(C.convertToNumber(undefined)).toBeUndefined();
     expect(C.convertToNumber("")).toBeUndefined();
     expect(C.convertToNumber("undefined")).toBeUndefined();
     expect(C.convertToNumber("n/a")).toBeNaN();
@@ -33,35 +34,36 @@ describe("convert Swapi to models helpers", () => {
   });
 
   it("urlToPage", () => {
+    const err = "Entities page reference is broken: ";
     expect(C.urlToPage("https://swapi.dev/api/people/")).toBe(1);
     expect(C.urlToPage("https://swapi.dev/api/people/?page=1")).toBe(1);
-    expect(C.urlToPage("https://swapi.dev/api/people/?page=5")).toBe(5);
-    expect(() => C.urlToPage("https://swapi.dev/api/people/?page=0")).toThrowError(Error);
-    expect(() => C.urlToPage("https://swapi.dev/api/people/?page=-3")).toThrowError(Error);
-    expect(() => C.urlToPage("https://swapi.dev/api/people/?page=xwz")).toThrowError(Error);
-    expect(() => C.urlToId("www.ttt/api/blah/11")).toThrow(Error);
-    expect(() => C.urlToId("www.ttt/api/blah/page11")).toThrow(Error);
-    expect(() => C.urlToId("www.ttt/api/blah/?page11")).toThrow(Error);
-    expect(() => C.urlToId("www.ttt/api/blah/page=11")).toThrow(Error);
-    expect(() => C.urlToId("www.ttt/api/blah/?page=11/")).toThrow(Error);
-    expect(() => C.urlToId("/blah/?page=23")).toThrow(Error);
-    expect(() => C.urlToId("")).toThrow(Error);
-    expect(() => C.urlToId("http://test.server.com/blah/?page=42")).toThrow(Error);
-    expect(() => C.urlToId("http://test.server.com/api/page=24")).toThrow(Error);
+    expect(C.urlToPage("http://sw.dev/api/people/?page=5")).toBe(5);
+    expect(() => C.urlToPage("http://sw.dev/api/p/?page=0")).toThrowError(Error(`${err}http://sw.dev/api/p/?page=0`));
+    expect(() => C.urlToPage("http://sw.dev/api/p/?page=-3")).toThrowError(Error(`${err}http://sw.dev/api/p/?page=-3`));
+    expect(() => C.urlToPage("http://s.de/api/p/?page=xwz")).toThrowError(Error(`${err}http://s.de/api/p/?page=xwz`));
+    expect(() => C.urlToPage("www.ttt/api/blah/11")).toThrow(Error(`${err}www.ttt/api/blah/11`));
+    expect(() => C.urlToPage("www.ttt/api/blah/page11")).toThrow(Error(`${err}www.ttt/api/blah/page11`));
+    expect(() => C.urlToPage("www.ttt/api/blah/?page11")).toThrow(Error(`${err}www.ttt/api/blah/?page11`));
+    expect(() => C.urlToPage("www.ttt/api/blah/page=11")).toThrow(Error(`${err}www.ttt/api/blah/page=11`));
+    expect(() => C.urlToPage("www.ttt/api/blah/?page=11/")).toThrow(Error(`${err}www.ttt/api/blah/?page=11/`));
+    expect(() => C.urlToPage("/blah/?page=23")).toThrow(Error(`${err}/blah/?page=23`));
+    expect(() => C.urlToPage("")).toThrow(Error(`${err}`));
+    expect(() => C.urlToPage("http://t.ser.com/b/?page=42")).toThrow(Error(`${err}http://t.ser.com/b/?page=42`));
+    expect(() => C.urlToPage("http://test.com/api/page=24")).toThrow(Error(`${err}http://test.com/api/page=24`));
   });
 });
 
 describe("convert models", () => {
   const films: Swapi.EntitiesPage<Swapi.Film> = filmsJson as any as Swapi.EntitiesPage<Swapi.Film>;
-  const date1 = new Date(Date.now() - 1000);
-  const date2 = new Date(Date.now());
+  const date1 = new Date(Date.now() - 1000).toISOString();
+  const date2 = new Date(Date.now()).toISOString();
 
   it("convertEntity", () => {
     const result: M.Entity = {
       id: "2",
       name: "",
-      created: date1,
-      edited: date2
+      created: new Date(Date.parse(date1)),
+      edited: new Date(Date.parse(date2))
     };
     expect(C.convertEntity({ url: "t/api/a/2/", created: date1, edited: date2 })).toEqual(result);
     expect(C.convertEntity({ url: "t/api/a/2/", name: "testN", created: date1, edited: date2 })).toEqual({

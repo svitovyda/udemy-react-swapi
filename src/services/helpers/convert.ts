@@ -2,7 +2,7 @@ import * as Swapi from "../swapiModels";
 import { Entity, Person, Planet, Starship, EntitiesPage, Film, PartOfFilm } from "../../models/entities";
 
 export const urlToId = (url: string): string => {
-  const match = url.match(/.+\/api\/\w+\/(\d+)\//);
+  const match = url.match(/^.+\/api\/\w+\/(\d+)\//);
   if (!match || match?.length !== 2) throw new Error(`Entities reference is broken: ${url}`);
   return match[1];
 };
@@ -11,10 +11,10 @@ export const urlToPage = (url: string): number => {
   const error = () => {
     throw new Error(`Entities page reference is broken: ${url}`);
   };
-  const match = url.match(/.+\/api\/\w+\/(\?page=(\d*))?/);
-  if (!match || match?.length !== 3) return error();
+  const match = url.match(/^.+\/api\/\w+\/(\?page=(\d*))?/);
+  if (!match || match?.length !== 3 || match[0] !== url) return error();
   if (match[1] === undefined && match[2] === undefined) return 1;
-  if (!match[1].startsWith("?page=")) return error();
+  if (!match[1]?.startsWith("?page=")) return error();
   const res = Number(match[2]);
   if (Number.isNaN(res) || res < 1) return error();
   return res;
@@ -37,8 +37,8 @@ export const convertToNumber = (str: string | undefined): number | undefined => 
 export const convertEntity = (entity: Swapi.Entity): Entity => ({
   id: urlToId(entity.url),
   name: entity.name ?? entity.title ?? "",
-  created: entity.created,
-  edited: entity.edited
+  created: new Date(Date.parse(entity.created)),
+  edited: new Date(Date.parse(entity.edited))
 });
 
 const convertPartOfFilm = (entity: Swapi.Entity): PartOfFilm => ({
@@ -99,7 +99,7 @@ export const convertFilm = (film: Swapi.Film): Film => ({
   openingCrawl: film.opening_crawl,
   planets: film.planets.map(urlToId),
   producer: film.producer,
-  releaseDate: film.release_date,
+  releaseDate: new Date(Date.parse(film.release_date)),
   species: film.species.map(urlToId),
   starships: film.starships.map(urlToId),
   vehicles: film.vehicles.map(urlToId)

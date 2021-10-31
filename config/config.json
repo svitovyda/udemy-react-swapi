@@ -1,3 +1,8 @@
 {
-  "serverUrl": "swapi.dev"
+  "serverUrl": "swapi.dev",
+  "imagesBaseUrl": "starwars-visualguide.com",
+  "planetAssets": "assets/img/planets",
+  "personAssets": "assets/img/characters",
+  "filmAssets": "assets/img/films",
+  "starshipAssets": "assets/img/starships"
 }
