@@ -10,11 +10,12 @@ import { PlanetsList } from "../planets/PlanetsList";
 import { PlanetDetails } from "../planets/PlanetDetails";
 import { StarshipDetails } from "../starships/StarshipDetails";
 import { StarshipsList } from "../starships/StarshipsList";
+import { DataProvider } from "../../services/DataProvider";
 
 const AppContainer = styled.div({
   width: "80%",
   margin: "auto"
-})
+});
 
 const HeaderNav = styled.div({
   display: "flex",
@@ -33,9 +34,10 @@ const AppComponents = styled.div({
 });
 
 const App: React.FC<{}> = () => {
-  const service = new SwapiService();
-  const films = service.getFilms();
-  console.log(films);
+  const [dataAvailable, setDataAvailable] = React.useState(false);
+  const dataProvider = DataProvider.getInstance(new SwapiService());
+
+  dataProvider.init().then(() => setDataAvailable(true));
 
   const items: HeaderItem[] = [
     {
@@ -52,7 +54,7 @@ const App: React.FC<{}> = () => {
     }
   ];
 
-  return (
+  return dataAvailable ? (
     <Router>
       <AppContainer>
         <HeaderNav>
@@ -85,6 +87,8 @@ const App: React.FC<{}> = () => {
         </AppComponents>
       </AppContainer>
     </Router>
+  ) : (
+    <AppContainer>Loading... </AppContainer>
   );
 };
 

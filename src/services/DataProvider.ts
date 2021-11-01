@@ -29,8 +29,9 @@ export class DataProvider {
     this.swapiService = swapiService;
   }
 
-  static getInstance = (swapiService: SwapiService): DataProvider => {
+  static getInstance = (swapiService?: SwapiService): DataProvider => {
     if (!DataProvider.instance) {
+      if (!swapiService) throw new Error("SwapiService is needed for first initialization");
       DataProvider.instance = new DataProvider(swapiService);
     }
     return DataProvider.instance;
@@ -87,9 +88,9 @@ export class DataProvider {
     id: string,
     cache: Cache<T>,
     fetcher: (id: string) => Promise<T>
-  ): Promise<T> => {
+  ): Promise<T|undefined> => {
     const cached = cache.get(id);
-    return cached ? cached : fetcher(id).then((e) => cache.add(id, e));
+    return cached ? cached : fetcher(id).then((e) => cache.add(id, e)).catch((_) => undefined);
   };
 
   protected cachePage =
@@ -99,13 +100,13 @@ export class DataProvider {
       return page;
     };
 
-  getPlanet = async (id: string): Promise<Planet> => this.getEntity(id, this.planets, this.swapiService.getPlanet);
+  getPlanet = async (id: string): Promise<Planet|undefined> => this.getEntity(id, this.planets, this.swapiService.getPlanet);
 
-  getPerson = async (id: string): Promise<Person> => this.getEntity(id, this.people, this.swapiService.getPerson);
+  getPerson = async (id: string): Promise<Person|undefined> => this.getEntity(id, this.people, this.swapiService.getPerson);
 
-  getFilm = async (id: string): Promise<Film> => this.getEntity(id, this.films, this.swapiService.getFilm);
+  getFilm = async (id: string): Promise<Film|undefined> => this.getEntity(id, this.films, this.swapiService.getFilm);
 
-  getStarship = async (id: string): Promise<Starship> =>
+  getStarship = async (id: string): Promise<Starship|undefined> =>
     this.getEntity(id, this.starships, this.swapiService.getStarship);
 
   getPeople = async (page?: number): Promise<EntitiesPage<Person>> =>

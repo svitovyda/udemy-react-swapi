@@ -43,7 +43,8 @@ const Logo = styled.img({
 const ListContainer = styled.div({
   display: "flex",
   padding: "4px 15px",
-  justifyContent: "space-around"
+  justifyContent: "space-around",
+  marginLeft: "auto"
 });
 // ul className="nav-links"
 const List = styled.ul({
