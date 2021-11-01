@@ -5,7 +5,7 @@ import { RandomPlanetScreen } from "../planets/RandomPlanetScreen";
 const Container = styled.div({
   display: "flex",
   justifyContent: "center",
-  marginTop: "3%",
+  marginTop: "2",
   width: "100%"
 });
 

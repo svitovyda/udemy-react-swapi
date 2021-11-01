@@ -31,13 +31,15 @@ const StarWarsSearch = styled.div({
 });
 // div className="img-block"
 const LogoContainer = styled.div({
-  marginLeft: "10%"
+  marginLeft: "0"
 });
 
 const Logo = styled.img({
   display: "flex",
-  width: 175,
-  height: 120
+  width: 135,
+  height: 90,
+  borderRadius: 10,
+  marginBottom: 10
 });
 // div className="container-nav-links"
 const ListContainer = styled.div({
@@ -54,13 +56,12 @@ const List = styled.ul({
 
 const ListElement = styled.li((props: React.DOMAttributes<HTMLLIElement> & { selected: boolean, first: boolean }) => ({
   display: "inline",
-  padding: "20px 32px",
+  padding: "2px 32px",
   borderWidth: 1,
   borderColor: rgba("#f1e9e9", 0.459),
   borderRightStyle: "groove",
-  fontWeight: 700,
+  // fontWeight: 700,
   borderLeftStyle: props.first ? "groove" : "none",
-
   ":hover": {
     backgroundColor: props.selected ? "unset" : "grey"
   }
@@ -104,7 +105,7 @@ export const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
       <StarWarsSearch>
         <LogoContainer>
           <Link to="/">
-            <Logo alt="StarDB" width="20%" height="20%" src="add later" />
+            <Logo alt="StarDB" width="20%" height="20%" src="static/logo.png" />
           </Link>
         </LogoContainer>
         <Search />

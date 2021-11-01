@@ -6,10 +6,11 @@ const Container = styled.div({
   border: 0,
   borderRadius: 4,
   flexWrap: "wrap",
-  alignSelf: "center",
+  alignSelf: "flex-start",
   backgroundColor: "#343434",
   boxShadow: "none",
-  position: "relative",
+  marginTop: 8,
+  marginLeft: 40,
   width: 200,
   opacity: 0.9,
   height: 30,
@@ -19,20 +20,18 @@ const Container = styled.div({
 
 const Input = styled.input({
   display: "flex",
+  alignSelf: "center",
   border: 0,
   borderRadius: 4,
   backgroundColor: "transparent",
   visibility: "visible",
   color: "#fff",
   fontSize: "medium",
-  fontWeight: 700,
   fontFamily: "'Open Sans', sans-serif",
-  width: "80%",
-  height: "100%",
+  width: "180",
+  height: 30,
   ":focus": {
-    outline: "none",
-    backgroundColor: "#585656",
-    height: "95%"
+    outline: "none"
   }
 });
 
