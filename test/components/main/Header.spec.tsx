@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Header } from "../../../src/components/navigation/Header";
+import { Header } from "../../../src/components/main/Header";
 
 describe("Header", () => {
   it("has displayName", () => {

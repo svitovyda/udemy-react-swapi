@@ -153,7 +153,7 @@ export const planetsPage1: M.EntitiesPage<M.Planet> = {
       population: 200000,
       rotationPeriod: 23,
       surfaceWater: 1,
-      terrain: ["desert"],
+      terrain: "desert",
       residents: ["1", "2", "4", "6", "7", "8", "9", "11", "43", "62"]
     },
     {
@@ -169,7 +169,7 @@ export const planetsPage1: M.EntitiesPage<M.Planet> = {
       population: 2000000000,
       rotationPeriod: 24,
       surfaceWater: 40,
-      terrain: ["grasslands", "mountains"],
+      terrain: "grasslands, mountains",
       residents: ["5", "68", "81"]
     }
   ]

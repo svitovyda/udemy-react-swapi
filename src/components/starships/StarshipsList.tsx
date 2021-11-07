@@ -1,16 +1,24 @@
 import * as React from "react";
-import styled from "@emotion/styled";
+import { DataProvider } from "../../services/DataProvider";
+import { EntitiesListController, PageProps } from "../entities/EntitiesListController";
+import { useParams } from "react-router-dom";
 
-export interface StarshipsListProps {
-  page: number;
-}
+export const StarshipsList: React.FC = () => {
+  const [dataProvider, setDataProvider] = React.useState<DataProvider | undefined>(undefined);
+  DataProvider.getInstance().then(setDataProvider);
 
-const Container = styled.div({
-  display: "flex"
-});
+  const { page } = useParams<PageProps>();
 
-export const StarshipsList: React.FC<StarshipsListProps> = (props: StarshipsListProps) => {
-  return <Container>{props.page}</Container>;
+  return dataProvider ? (
+    <EntitiesListController
+      page={page}
+      entitiesFetcher={dataProvider.getStarships}
+      entityUrlId="starships"
+      filmFetcher={dataProvider.getFilm}
+    />
+  ) : (
+    <>Loading...</>
+  );
 };
 
 StarshipsList.displayName = "StarshipsList";

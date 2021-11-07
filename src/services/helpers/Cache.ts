@@ -4,7 +4,7 @@ export class Cache<T> {
   private max: number;
 
   constructor(max: number = 100) {
-    if (max < 1 || Math.floor(max) !== max) throw new Error("Invalid cache size");
+    if (max < 1 || !Number.isInteger(max)) throw new Error("Invalid cache size");
     this.max = max;
   }
 

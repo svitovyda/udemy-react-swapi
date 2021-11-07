@@ -88,8 +88,8 @@ export interface Planet extends PartOfFilm {
   rotationPeriod: number;
   // The percentage of the planet surface that is naturally occuring water or bodies of water
   surfaceWater?: number;
-  // the terrain of this planet. Comma-seperated if diverse
-  terrain: string[];
+  // the terrain of this planet
+  terrain: string;
 }
 
 /**

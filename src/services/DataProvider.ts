@@ -11,6 +11,7 @@ interface EntitiesWithInfo<T extends Entity> {
   count: number;
 }
 
+const INITIALIZATION_ERROR = new Error("Initialization error");
 export class DataProvider {
   protected films: Cache<Film> = new Cache(FILMS_MAX);
   protected filmsCount?: number;
@@ -21,20 +22,43 @@ export class DataProvider {
   protected starships: Cache<Starship> = new Cache(ENTITY_MAX);
   protected starshipsCount?: number;
 
-  protected swapiService: SwapiService;
+  private resolve: (d: DataProvider) => void;
+  private reject: (e: Error) => void;
+
+  private swapiService: SwapiService | undefined;
 
   private static instance: DataProvider;
 
-  private constructor(swapiService: SwapiService) {
-    this.swapiService = swapiService;
+  private promise: Promise<DataProvider>;
+
+  private constructor() {
+    this.resolve = () => {
+      throw INITIALIZATION_ERROR;
+    };
+    this.reject = () => {
+      throw INITIALIZATION_ERROR;
+    };
+    this.swapiService = undefined;
+    this.promise = new Promise((resolve, reject) => {
+      this.resolve = resolve;
+      this.reject = reject;
+    });
   }
 
-  static getInstance = (swapiService?: SwapiService): DataProvider => {
+  static getInstance = (): Promise<DataProvider> => {
     if (!DataProvider.instance) {
-      if (!swapiService) throw new Error("SwapiService is needed for first initialization");
-      DataProvider.instance = new DataProvider(swapiService);
+      DataProvider.instance = new DataProvider();
     }
-    return DataProvider.instance;
+    return DataProvider.instance.promise;
+  };
+
+  static init = async (swapiService: SwapiService): Promise<DataProvider> => {
+    if (!DataProvider.instance) {
+      DataProvider.instance = new DataProvider();
+    }
+    if (DataProvider.instance.swapiService === swapiService) return Promise.resolve(DataProvider.instance);
+    await DataProvider.instance.init(swapiService);
+    return await DataProvider.instance.promise;
   };
 
   getPagesTillMax = async <T extends Entity>(
@@ -60,37 +84,41 @@ export class DataProvider {
       .then(recursiveFunction);
   };
 
-  init = async () => {
+  protected init = async (swapiService: SwapiService) => {
     await Promise.all([
-      this.getPagesTillMax(FILMS_MAX, this.swapiService.getFilms).then((films) => {
+      this.getPagesTillMax(FILMS_MAX, swapiService.getFilms).then((films) => {
         this.filmsCount = films.count;
         films.entities.forEach((f) => this.films.add(f.id, f));
       }),
 
-      this.getPagesTillMax(PLANETS_MAX, this.swapiService.getPlanets).then((planets) => {
+      this.getPagesTillMax(PLANETS_MAX, swapiService.getPlanets).then((planets) => {
         this.planetsCount = planets.count;
         planets.entities.forEach((p) => this.planets.add(p.id, p));
       }),
 
-      this.swapiService.getPeople().then((people) => {
+      swapiService.getPeople().then((people) => {
         this.peopleCount = people.count;
         people.results.forEach((p) => this.people.add(p.id, p));
       }),
 
-      this.swapiService.getStarships().then((ships) => {
+      swapiService.getStarships().then((ships) => {
         this.starshipsCount = ships.count;
         ships.results.forEach((s) => this.starships.add(s.id, s));
       })
-    ]);
+    ])
+      .then(() => this.resolve(DataProvider.instance))
+      .catch((e) => this.reject(e));
+    this.swapiService = swapiService;
   };
 
   protected getEntity = async <T extends Entity>(
     id: string,
     cache: Cache<T>,
-    fetcher: (id: string) => Promise<T>
-  ): Promise<T|undefined> => {
+    fetcher?: (id: string) => Promise<T>
+  ): Promise<T> => {
+    if (!fetcher) throw INITIALIZATION_ERROR;
     const cached = cache.get(id);
-    return cached ? cached : fetcher(id).then((e) => cache.add(id, e)).catch((_) => undefined);
+    return cached ? cached : fetcher(id).then((e) => cache.add(id, e));
   };
 
   protected cachePage =
@@ -100,23 +128,23 @@ export class DataProvider {
       return page;
     };
 
-  getPlanet = async (id: string): Promise<Planet|undefined> => this.getEntity(id, this.planets, this.swapiService.getPlanet);
+  getPlanet = async (id: string): Promise<Planet> => this.getEntity(id, this.planets, this.swapiService?.getPlanet);
 
-  getPerson = async (id: string): Promise<Person|undefined> => this.getEntity(id, this.people, this.swapiService.getPerson);
+  getPerson = async (id: string): Promise<Person> => this.getEntity(id, this.people, this.swapiService?.getPerson);
 
-  getFilm = async (id: string): Promise<Film|undefined> => this.getEntity(id, this.films, this.swapiService.getFilm);
+  getFilm = async (id: string): Promise<Film> => this.getEntity(id, this.films, this.swapiService?.getFilm);
 
-  getStarship = async (id: string): Promise<Starship|undefined> =>
-    this.getEntity(id, this.starships, this.swapiService.getStarship);
+  getStarship = async (id: string): Promise<Starship> =>
+    this.getEntity(id, this.starships, this.swapiService?.getStarship);
 
   getPeople = async (page?: number): Promise<EntitiesPage<Person>> =>
-    this.swapiService.getPeople(page).then(this.cachePage(this.people));
+    this.swapiService?.getPeople(page).then(this.cachePage(this.people)) ?? Promise.reject(INITIALIZATION_ERROR);
 
   getPlanets = async (page?: number): Promise<EntitiesPage<Planet>> =>
-    this.swapiService.getPlanets(page).then(this.cachePage(this.planets));
+    this.swapiService?.getPlanets(page).then(this.cachePage(this.planets)) ?? Promise.reject(INITIALIZATION_ERROR);
 
   getStarships = async (page?: number): Promise<EntitiesPage<Starship>> =>
-    this.swapiService.getStarships(page).then(this.cachePage(this.starships));
+    this.swapiService?.getStarships(page).then(this.cachePage(this.starships)) ?? Promise.reject(INITIALIZATION_ERROR);
 
   getPlanetsCount = (): number | undefined => this.planetsCount;
 

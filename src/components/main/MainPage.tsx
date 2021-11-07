@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { RandomPlanetScreen } from "../planets/RandomPlanetScreen";
+import { RandomPlanetController } from "../planets/RandomPlanetController";
 
 const Container = styled.div({
   display: "flex",
@@ -12,7 +12,7 @@ const Container = styled.div({
 export const MainPage: React.FC = () => {
   return (
     <Container>
-      <RandomPlanetScreen />
+      <RandomPlanetController />
     </Container>
   );
 };

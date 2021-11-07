@@ -1,4 +1,4 @@
-import { Search } from "../../../src/components/navigation/Search";
+import { Search } from "../../../src/components/general/Search";
 
 describe("Search", () => {
   it("has displayName", () => {

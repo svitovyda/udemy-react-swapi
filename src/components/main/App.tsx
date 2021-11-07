@@ -1,26 +1,28 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Header, HeaderItem } from "../navigation/Header";
+import { Header, HeaderItem } from "./Header";
 import { SwapiService } from "../../services/SwapiService";
 import { MainPage } from "./MainPage";
-import { PersonDetails } from "../people/PersonDetails";
+import { PersonDetailsController } from "../people/PersonDetailsController";
+import { StarshipDetailsController } from "../starships/StarshipDetailsController";
+import { DataProvider } from "../../services/DataProvider";
+import { PlanetDetailsController } from "../planets/PlanetDetailsController";
 import { PeopleList } from "../people/PeopleList";
 import { PlanetsList } from "../planets/PlanetsList";
-import { PlanetDetails } from "../planets/PlanetDetails";
-import { StarshipDetails } from "../starships/StarshipDetails";
 import { StarshipsList } from "../starships/StarshipsList";
-import { DataProvider } from "../../services/DataProvider";
+import { WithLoader } from "../general/withLoader";
 
 const AppContainer = styled.div({
   width: "80%",
-  margin: "auto"
+  height: "90%",
+  margin: "auto",
+  marginTop: 15
 });
 
 const HeaderNav = styled.div({
   display: "flex",
-  justifyContent: "center",
-  marginTop: 50
+  justifyContent: "center"
 });
 
 const AppMainPage = styled.div({
@@ -33,11 +35,11 @@ const AppComponents = styled.div({
   width: "100%"
 });
 
-const App: React.FC<{}> = () => {
-  const [dataAvailable, setDataAvailable] = React.useState(false);
-  const dataProvider = DataProvider.getInstance(new SwapiService());
+const App: React.FC = () => {
+  const [dataProvider, setDataProvider] = React.useState<DataProvider | undefined>(undefined);
+  const swapiService = React.useRef(new SwapiService());
 
-  dataProvider.init().then(() => setDataAvailable(true));
+  DataProvider.init(swapiService.current).then(setDataProvider);
 
   const items: HeaderItem[] = [
     {
@@ -54,41 +56,41 @@ const App: React.FC<{}> = () => {
     }
   ];
 
-  return dataAvailable ? (
-    <Router>
-      <AppContainer>
-        <HeaderNav>
-          <Header items={items} />
-        </HeaderNav>
-        <AppMainPage>
-          <Switch>
-            <Route path="/" exact component={MainPage} />
-          </Switch>
-        </AppMainPage>
-        <AppComponents>
-          <Switch>
-            <Route path="/people/?page=:page" component={PeopleList} />
-          </Switch>
-          <Switch>
-            <Route path="/people/id=:id" component={PersonDetails} />
-          </Switch>
-          <Switch>
-            <Route path="/planets/?page=:page" component={PlanetsList} />
-          </Switch>
-          <Switch>
-            <Route path="/planets/id=:id" component={PlanetDetails} />
-          </Switch>
-          <Switch>
-            <Route path="/starships/?page=:page" component={StarshipsList} />
-          </Switch>
-          <Switch>
-            <Route path="/starships/id=:id" component={StarshipDetails} />
-          </Switch>
-        </AppComponents>
-      </AppContainer>
-    </Router>
-  ) : (
-    <AppContainer>Loading... </AppContainer>
+  return (
+    <AppContainer>
+      <WithLoader isLoading={!dataProvider}>
+        <Router>
+          <HeaderNav>
+            <Header items={items} />
+          </HeaderNav>
+          <AppMainPage>
+            <Switch>
+              <Route path="/" exact component={MainPage} />
+            </Switch>
+          </AppMainPage>
+          <AppComponents>
+            <Switch>
+              <Route exact path="/people/:page" component={PeopleList} />
+            </Switch>
+            <Switch>
+              <Route exact path="/people/details/:id" component={PersonDetailsController} />
+            </Switch>
+            <Switch>
+              <Route exact path="/planets/:page" component={PlanetsList} />
+            </Switch>
+            <Switch>
+              <Route exact path="/planets/details/:id" component={PlanetDetailsController} />
+            </Switch>
+            <Switch>
+              <Route exact path="/starships/:page" component={StarshipsList} />
+            </Switch>
+            <Switch>
+              <Route exact path="/starships/details/:id" component={StarshipDetailsController} />
+            </Switch>
+          </AppComponents>
+        </Router>
+      </WithLoader>
+    </AppContainer>
   );
 };
 

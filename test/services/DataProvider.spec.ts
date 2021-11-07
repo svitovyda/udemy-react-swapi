@@ -18,14 +18,13 @@ const mock = jest.fn<SwapiService, any[]>(() => ({
 
 describe("DataProvider", () => {
   const service = mock();
-  const dataProvider = DataProvider.getInstance(service);
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it("init", async () => {
-    await dataProvider.init();
+    const dataProvider = await DataProvider.init(service);
 
     await expect(dataProvider.getPerson("1")).resolves.toEqual(R.peoplePage1.results[0]);
     expect(service.getPerson).toHaveBeenCalledTimes(0);

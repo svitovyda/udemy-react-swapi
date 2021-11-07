@@ -70,7 +70,7 @@ export const convertPlanet = (planet: Swapi.Planet): Planet => ({
   population: convertToNumber(planet.population),
   rotationPeriod: convertToNumber(planet.rotation_period) || NaN,
   surfaceWater: convertToNumber(planet.surface_water) ?? NaN,
-  terrain: planet.terrain.split(", "),
+  terrain: planet.terrain,
   residents: planet.residents.map(urlToId)
 });
 
@@ -110,10 +110,11 @@ export const convertEntities = <T extends Swapi.Entity, P extends Entity>(
   convert: (e: T) => P,
   page: number = 1
 ): EntitiesPage<P> => {
-  if (page < 1 || Math.floor(page) !== page) throw Error(`Invalid page value ${page}: page should be intger > 0!`);
-  if(entities.count < 0 || Math.floor(entities.count) != entities.count) throw Error(
-    `Invalid entities count ${entities.count} input page ${page}: entities count should be positive integer!`
-  );
+  if (page < 1 || !Number.isInteger(page)) throw Error(`Invalid page value ${page}: page should be intger > 0!`);
+  if (entities.count < 0 || !Number.isInteger(entities.count))
+    throw Error(
+      `Invalid entities count ${entities.count} input page ${page}: entities count should be positive integer!`
+    );
   return {
     count: entities.count,
     page,

@@ -19,7 +19,10 @@ describe("RandomPlanet", () => {
 
     render(<RandomPlanet {...props} />);
     expect(screen.queryAllByText(planetsPage1.results[0].name)).toHaveLength(1);
-    const btn = screen.queryByText("Random Planet");
+    expect(screen.queryAllByText("200000")).toHaveLength(1);
+    expect(screen.queryAllByText("10465")).toHaveLength(1);
+    expect(screen.queryAllByText("23")).toHaveLength(1);
+    const btn = screen.queryByText("Load Random Planet");
     expect(btn).toBeTruthy();
     btn!.click();
     expect(clickMock).toBeCalled();
@@ -27,9 +30,9 @@ describe("RandomPlanet", () => {
   it("rendered loading status", () => {
     const clickMock = jest.fn();
 
-    render(<RandomPlanet planet={undefined} onShowRanomPlanet={clickMock} />);
-    expect(screen.queryAllByText("...Loading")).toHaveLength(1);
-    const btn = screen.queryByText("Random Planet");
+    render(<RandomPlanet onShowRanomPlanet={clickMock} />);
+    expect(screen.queryAllByText("Error")).toHaveLength(1);
+    const btn = screen.queryByText("Load Random Planet");
     expect(btn).toBeTruthy();
     btn!.click();
     expect(clickMock).toBeCalled();

@@ -1,26 +1,24 @@
 import * as React from "react";
-import styled from "@emotion/styled";
+import { DataProvider } from "../../services/DataProvider";
+import { EntitiesListController, PageProps } from "../entities/EntitiesListController";
+import { useParams } from "react-router-dom";
 
-export interface PeopleListProps {
-  page: number;
-}
+export const PeopleList: React.FC = () => {
+  const [dataProvider, setDataProvider] = React.useState<DataProvider | undefined>(undefined);
+  DataProvider.getInstance().then(setDataProvider);
 
-const Container = styled.div({
-  display: "flex",
-  justifyContent: "center",
-  flexBasis: "100%",
-  margin: "0px 200px",
-  backgroundColor: "#0a0a0a"
-});
+  const { page } = useParams<PageProps>();
 
-const Page = styled.div({
-  display: "flex",
-  flexDirection: "column",
-  flexGrow: 5
-});
-
-export const PeopleList: React.FC<PeopleListProps> = (props: PeopleListProps) => {
-  return <Container><Page>{props.page}</Page></Container>;
+  return dataProvider ? (
+    <EntitiesListController
+      page={page}
+      entitiesFetcher={dataProvider.getPeople}
+      entityUrlId="people"
+      filmFetcher={dataProvider.getFilm}
+    />
+  ) : (
+    <>Loading...</>
+  );
 };
 
 PeopleList.displayName = "PeopleList";
