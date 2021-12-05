@@ -14,7 +14,8 @@ describe("RandomPlanetView", () => {
     const props: RandomPlanetViewProps = {
       planet: planetsPage1.results[0],
       imageUrl: "",
-      onShowRanomPlanet: clickMock
+      onShowRanomPlanet: clickMock,
+      btnEnabled: true
     };
 
     render(<RandomPlanetView {...props} />);
@@ -27,14 +28,21 @@ describe("RandomPlanetView", () => {
     btn!.click();
     expect(clickMock).toBeCalled();
   });
-  it("rendered loading status", () => {
+  it("renders disabled button", () => {
     const clickMock = jest.fn();
 
-    render(<RandomPlanetView onShowRanomPlanet={clickMock} />);
-    expect(screen.queryAllByText("Error")).toHaveLength(1);
-    const btn = screen.queryByText("Load Random Planet");
+    const props: RandomPlanetViewProps = {
+      planet: planetsPage1.results[0],
+      imageUrl: "",
+      btnEnabled: false,
+      onShowRanomPlanet: clickMock
+    };
+
+    render(<RandomPlanetView {...props} />);
+    const btn = screen.queryByText("Load Random Planet")?.closest('button');
     expect(btn).toBeTruthy();
+    expect(btn?.hasAttribute("disabled")).toBeTruthy();
     btn!.click();
-    expect(clickMock).toBeCalled();
+    expect(clickMock).not.toBeCalled();
   });
 });
