@@ -78,7 +78,7 @@ export interface HeaderElementProps {
 
 const HeaderElement: React.FC<HeaderElementProps> = (props: HeaderElementProps) => {
   return (
-    <ListElement key={props.item.id} selected={props.selected} >
+    <ListElement key={props.item.id} selected={props.selected}>
       <LinkElement selected={props.selected} to={`/${props.item.id}/1`}>
         {props.item.caption}
       </LinkElement>
@@ -90,7 +90,7 @@ export interface HeaderProps {
   items: HeaderItem[];
 }
 
-export const Header: React.FC<HeaderProps> = React.memo((props: HeaderProps) => {
+export const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   const location = useLocation();
   return (
     <Nav>
@@ -111,6 +111,6 @@ export const Header: React.FC<HeaderProps> = React.memo((props: HeaderProps) => 
       </ListContainer>
     </Nav>
   );
-});
+};
 
 Header.displayName = "Header";

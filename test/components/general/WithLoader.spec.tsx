@@ -8,18 +8,18 @@ describe("WithLoader", () => {
   });
 
   it("Shows loader if isLoading, no children", () => {
-    render(<WithLoader isLoading />);
+    render(<WithLoader loading />);
     expect(screen.queryAllByText("loading")).toHaveLength(1);
   });
 
   it("Shows no loader if isLoading=false, no children", () => {
-    render(<WithLoader isLoading={false} />);
+    render(<WithLoader loading={false} />);
     expect(screen.queryAllByText("loading")).toHaveLength(0);
   });
 
   it("Shows content if isLoading=false", () => {
     render(
-      <WithLoader isLoading={false}>
+      <WithLoader loading={false}>
         <div>Content</div>
         <div>Info</div>
       </WithLoader>
@@ -31,7 +31,7 @@ describe("WithLoader", () => {
 
   it("Shows no content if isLoading", () => {
     render(
-      <WithLoader isLoading>
+      <WithLoader loading>
         <div>Content</div>
         <div>Info</div>
       </WithLoader>

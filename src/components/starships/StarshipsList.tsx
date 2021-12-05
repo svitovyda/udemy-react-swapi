@@ -1,24 +1,21 @@
 import * as React from "react";
-import { DataProvider } from "../../services/DataProvider";
-import { EntitiesListController, PageProps } from "../entities/EntitiesListController";
-import { useParams } from "react-router-dom";
+import { WithDataListProps } from "../entities/utils";
+import { withData } from "../entities/WithData";
+import { EntitiesListView } from "../entities/EntitiesListView";
+import { loadPageController } from "../entities/hooks";
 
-export const StarshipsList: React.FC = () => {
-  const [dataProvider, setDataProvider] = React.useState<DataProvider | undefined>(undefined);
-  DataProvider.getInstance().then(setDataProvider);
+const Starships: React.FC<WithDataListProps> = (props: WithDataListProps) => {
+  const { data, dataProvider } = props;
 
-  const { page } = useParams<PageProps>();
+  loadPageController(dataProvider.getStarships, props);
 
-  return dataProvider ? (
-    <EntitiesListController
-      page={page}
-      entitiesFetcher={dataProvider.getStarships}
-      entityUrlId="starships"
-      filmFetcher={dataProvider.getFilm}
-    />
-  ) : (
-    <>Loading...</>
+  return (
+    <>
+      {(!!data && <EntitiesListView data={data} entityUrlId="starships" />)}
+    </>
   );
 };
+Starships.displayName = "Starships";
 
+export const StarshipsList = withData(Starships);
 StarshipsList.displayName = "StarshipsList";

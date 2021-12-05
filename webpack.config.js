@@ -27,6 +27,10 @@ const config = {
       {
         test: /\.tsx?$/,
         loader: "ts-loader"
+      },
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack"]
       }
     ]
   },
@@ -50,5 +54,4 @@ const config = {
     }
   }
 };
-
 module.exports = config;

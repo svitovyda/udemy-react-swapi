@@ -2,8 +2,8 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import { rgba } from "emotion-rgba";
 import { Link } from "react-router-dom";
-import { EntityShort } from "./utils";
 import { Paginator } from "../general/Paginator";
+import { ShortPage } from "../../services/DataProvider";
 
 const Container = styled.div({
   display: "flex",
@@ -24,7 +24,6 @@ const ListItem = styled.li({
   display: "flex",
   flexDirection: "row",
   fontSize: "0.9rem",
-  textAlign: "center",
   fontFamily: "'Open Sans', sans-serif",
   color: rgba("#f1e9e9", 0.459),
   width: "100%"
@@ -35,6 +34,7 @@ const NameBlock = styled.span({
   paddingLeft: 10,
   width: 320,
   margin: 5,
+  alignItems: "flex-start",
   alignSelf: "center",
   alignContent: "flex-start",
   color: "white"
@@ -44,8 +44,9 @@ const FilmsBlock = styled.span({
   display: "flex",
   paddingLeft: 10,
   width: "100%",
-  alignContent: "flex-start",
-  alignSelf: "center"
+  alignItems: "flex-start",
+  alignSelf: "center",
+  alignContent: "flex-start"
 });
 
 const LinkElement = styled(Link)({
@@ -68,37 +69,38 @@ const EntityLinkElement = styled(LinkElement)({
   }
 });
 
-export interface EntitiesListProps {
-  currentPage: number;
-  next: boolean;
-  previous: boolean;
-  entityId: string;
-  data: EntityShort[];
+export interface EntitiesListViewProps {
+  entityUrlId: string;
+  data: ShortPage;
 }
 
 const renderPageLink =
   (entityId: string) =>
-  (page: number, text?: string): React.ReactElement =>
-    <LinkElement to={`/${entityId}/${page}`}>{text ? text : page}</LinkElement>;
+    (page: number, text?: string): React.ReactElement =>
+      <LinkElement to={`/${entityId}/${page}`}>{text ? text : page}</LinkElement>;
 
-export const EntitiesList: React.FC<EntitiesListProps> = (props: EntitiesListProps) => {
-  const { entityId, data, ...pagination } = props;
+export const EntitiesListView: React.FC<EntitiesListViewProps> = (props: EntitiesListViewProps) => {
+  const { entityUrlId: entityId, data } = props;
 
-  return (
-    <Container>
-      <List>
-        {data.map((planet) => (
-          <EntityLinkElement to={`/${entityId}/details/${planet.id}`}>
-            <ListItem>
-              <NameBlock>{planet.name}</NameBlock>
-              <FilmsBlock>{planet.films.join(", ")}</FilmsBlock>
-            </ListItem>
-          </EntityLinkElement>
-        ))}
-      </List>
-      <Paginator {...pagination} renderLink={renderPageLink(entityId)} min={1} />
-    </Container>
-  );
+  return (<Container>
+    <List>
+      {data.result.map((item) => (
+        <EntityLinkElement to={`/${entityId}/details/${item.id}`} key={`${entityId}-${item.id}`}>
+          <ListItem>
+            <NameBlock>{item.name}</NameBlock>
+            <FilmsBlock>{item.films.join(", ")}</FilmsBlock>
+          </ListItem>
+        </EntityLinkElement>
+      ))}
+    </List>
+    <Paginator
+      renderLink={renderPageLink(entityId)}
+      min={1}
+      currentPage={data.page}
+      next={data.next}
+      previous={data.previous}
+    />
+  </Container>);
 };
 
-EntitiesList.displayName = "EntitiesList";
+EntitiesListView.displayName = "EntitiesListView";

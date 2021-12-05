@@ -4,14 +4,15 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Header, HeaderItem } from "./Header";
 import { SwapiService } from "../../services/SwapiService";
 import { MainPage } from "./MainPage";
-import { PersonDetailsController } from "../people/PersonDetailsController";
-import { StarshipDetailsController } from "../starships/StarshipDetailsController";
+import { PersonDetails } from "../people/PersonDetails";
+import { StarshipDetails } from "../starships/StarshipDetails";
 import { DataProvider } from "../../services/DataProvider";
-import { PlanetDetailsController } from "../planets/PlanetDetailsController";
+import { PlanetDetails } from "../planets/PlanetDetails";
 import { PeopleList } from "../people/PeopleList";
 import { PlanetsList } from "../planets/PlanetsList";
 import { StarshipsList } from "../starships/StarshipsList";
 import { WithLoader } from "../general/withLoader";
+import { WithError } from "../general/WithError";
 
 const AppContainer = styled.div({
   width: "80%",
@@ -38,8 +39,11 @@ const AppComponents = styled.div({
 const App: React.FC = () => {
   const [dataProvider, setDataProvider] = React.useState<DataProvider | undefined>(undefined);
   const swapiService = React.useRef(new SwapiService());
+  const [error, setError] = React.useState<Error | undefined>(undefined);
 
-  DataProvider.init(swapiService.current).then(setDataProvider);
+  DataProvider.init(swapiService.current)
+    .then(setDataProvider)
+    .catch((e) => setError(e));
 
   const items: HeaderItem[] = [
     {
@@ -58,38 +62,40 @@ const App: React.FC = () => {
 
   return (
     <AppContainer>
-      <WithLoader isLoading={!dataProvider}>
-        <Router>
-          <HeaderNav>
-            <Header items={items} />
-          </HeaderNav>
-          <AppMainPage>
-            <Switch>
-              <Route path="/" exact component={MainPage} />
-            </Switch>
-          </AppMainPage>
-          <AppComponents>
-            <Switch>
-              <Route exact path="/people/:page" component={PeopleList} />
-            </Switch>
-            <Switch>
-              <Route exact path="/people/details/:id" component={PersonDetailsController} />
-            </Switch>
-            <Switch>
-              <Route exact path="/planets/:page" component={PlanetsList} />
-            </Switch>
-            <Switch>
-              <Route exact path="/planets/details/:id" component={PlanetDetailsController} />
-            </Switch>
-            <Switch>
-              <Route exact path="/starships/:page" component={StarshipsList} />
-            </Switch>
-            <Switch>
-              <Route exact path="/starships/details/:id" component={StarshipDetailsController} />
-            </Switch>
-          </AppComponents>
-        </Router>
-      </WithLoader>
+      <WithError error={error}>
+        <WithLoader loading={!dataProvider}>
+          <Router>
+            <HeaderNav>
+              <Header items={items} />
+            </HeaderNav>
+            <AppMainPage>
+              <Switch>
+                <Route path="/" exact component={MainPage} />
+              </Switch>
+            </AppMainPage>
+            <AppComponents>
+              <Switch>
+                <Route exact path="/people/:page" component={PeopleList} />
+              </Switch>
+              <Switch>
+                <Route exact path="/people/details/:id" component={PersonDetails}  />
+              </Switch>
+              <Switch>
+                <Route exact path="/planets/:page" component={PlanetsList} />
+              </Switch>
+              <Switch>
+                <Route exact path="/planets/details/:id" component={PlanetDetails} />
+              </Switch>
+              <Switch>
+                <Route exact path="/starships/:page" component={StarshipsList} />
+              </Switch>
+              <Switch>
+                <Route exact path="/starships/details/:id" component={StarshipDetails} />
+              </Switch>
+            </AppComponents>
+          </Router>
+        </WithLoader>
+      </WithError>
     </AppContainer>
   );
 };

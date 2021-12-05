@@ -1,24 +1,22 @@
 import * as React from "react";
-import { DataProvider } from "../../services/DataProvider";
-import { EntitiesListController, PageProps } from "../entities/EntitiesListController";
-import { useParams } from "react-router-dom";
+import { EntitiesListView } from "../entities/EntitiesListView";
+import { loadPageController } from "../entities/hooks";
+import { WithDataListProps } from "../entities/utils";
+import { withData } from "../entities/WithData";
 
-export const PeopleList: React.FC = () => {
-  const [dataProvider, setDataProvider] = React.useState<DataProvider | undefined>(undefined);
-  DataProvider.getInstance().then(setDataProvider);
+const People: React.FC<WithDataListProps> = (props: WithDataListProps) => {
 
-  const { page } = useParams<PageProps>();
+  const { data, dataProvider } = props;
 
-  return dataProvider ? (
-    <EntitiesListController
-      page={page}
-      entitiesFetcher={dataProvider.getPeople}
-      entityUrlId="people"
-      filmFetcher={dataProvider.getFilm}
-    />
-  ) : (
-    <>Loading...</>
+  loadPageController(dataProvider.getPeople, props);
+
+  return (
+    <>
+      {(!!data && <EntitiesListView data={data} entityUrlId="people" />)}
+    </>
   );
 };
+People.displayName = "People";
 
+export const PeopleList = withData(People);
 PeopleList.displayName = "PeopleList";

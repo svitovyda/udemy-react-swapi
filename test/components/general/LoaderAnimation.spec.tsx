@@ -1,14 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
-import { Spinner } from "../../../src/components/general/Spinner";
+import { LoaderAnimation } from "../../../src/components/general/LoaderAnimation";
 
-describe("Spinner", () => {
+describe("LoaderAnimation", () => {
   it("has displayName", () => {
-    expect(Spinner.displayName).toBe("Spinner");
+    expect(LoaderAnimation.displayName).toBe("LoaderAnimation");
   });
 
   it("Has 'Loading' text", () => {
-    render(<Spinner />);
+    render(<LoaderAnimation />);
     expect(screen.queryAllByText("loading")).toHaveLength(1);
   });
 });

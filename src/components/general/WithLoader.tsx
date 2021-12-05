@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Spinner } from "./Spinner";
+import { LoaderAnimation } from "./LoaderAnimation";
 
 const Container = styled.div({
   display: "flex",
@@ -11,14 +11,14 @@ const Container = styled.div({
   height: "100%"
 });
 
-export interface WithLoaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  isLoading: boolean;
+export interface WithLoaderProps extends React.HTMLAttributes<HTMLElement> {
+  loading?: boolean;
 }
 
-export const WithLoader: React.FC<WithLoaderProps> = React.memo((props: WithLoaderProps) => {
-  return props.isLoading ? (
+export const WithLoader = React.memo((props: WithLoaderProps) => {
+  return props.loading ? (
     <Container>
-      <Spinner />
+      <LoaderAnimation />
     </Container>
   ) : (
     <>{props.children}</>

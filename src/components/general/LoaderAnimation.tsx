@@ -74,14 +74,14 @@ const TextContainer = styled.div({
   textTransform: "uppercase"
 });
 
-export const Spinner: React.FC = React.memo(() => {
+export const LoaderAnimation: React.FC = React.memo(() => {
   return (
     <Container>
       <Ring />
-      <RingInner/>
+      <RingInner />
       <TextContainer>loading</TextContainer>
     </Container>
   );
 });
 
-Spinner.displayName = "Spinner";
+LoaderAnimation.displayName = "LoaderAnimation";

@@ -29,6 +29,7 @@
     "jest"
   ],
   "rules": {
+    "arrow-parens": "error",
     "rxjs/no-ignored-error": "error",
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
@@ -36,10 +37,5 @@
     "jest/prefer-to-have-length": "warn",
     "jest/valid-expect": "error"
   },
-  "include": ["src", "test"],
-  "settings": {
-    "import/resolver": {
-      "typescript": {}
-    }
-  }
+  "include": ["src", "test"]
 }

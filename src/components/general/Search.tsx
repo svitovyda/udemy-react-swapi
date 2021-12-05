@@ -58,7 +58,6 @@ const Submit = styled.input({
 });
 
 export const Search: React.FC = React.memo(() => {
-
   return (
     <Container>
       <form>

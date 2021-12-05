@@ -37,7 +37,6 @@ const ListItem = styled.li({
   display: "flex",
   flexDirection: "row",
   fontSize: "0.9rem",
-  textAlign: "center",
   fontFamily: "'Open Sans', sans-serif",
   margin: "10 auto",
   color: rgba("#f1e9e9", 0.459),
@@ -47,7 +46,8 @@ const ListItem = styled.li({
 const InfoBlock = styled.span({
   display: "flex",
   paddingLeft: 10,
-  alignContent: "flex-start"
+  alignContent: "flex-start",
+  alignItems: "flex-start"
 });
 
 const LabelInfoBlock = styled(InfoBlock)({
@@ -55,23 +55,40 @@ const LabelInfoBlock = styled(InfoBlock)({
 });
 
 const ValueInfoBlock = styled(InfoBlock)({
-  width: "100%"
+  width: "100%",
+  alignContent: "flex-start",
+  alignItems: "flex-start",
+  textAlign: "left"
 });
 
 const DateInfoBlock = styled(ValueInfoBlock)({
+  fontSize: "0.7rem"
+});
+
+const DateLabelBlock = styled(LabelInfoBlock)({
   fontSize: "0.8rem"
 });
 
-export interface DetailsListProps {
+const Image = styled.img({
+  width: 250,
+  height: 250,
+  margin: "1rem",
+  borderRadius: 10,
+  objectFit: "cover"
+});
+
+export interface EntityDetailsViewProps {
   caption?: string;
   details: EntityDetail[];
   lastEdited?: Date;
+  img?: string;
 }
 
-export const DetailsList: React.FC<DetailsListProps> = (props: DetailsListProps) => {
+export const EntityDetailsView: React.FC<EntityDetailsViewProps> = (props: EntityDetailsViewProps) => {
   return (
     <Container>
       {props.caption && <EntityName>{props.caption}</EntityName>}
+      {props.img && <Image src={props.img} alt={props.caption} />}
       <List>
         {props.details.map((d) => (
           <ListItem key={d.label}>
@@ -81,7 +98,7 @@ export const DetailsList: React.FC<DetailsListProps> = (props: DetailsListProps)
         ))}
         {props.lastEdited && (
           <ListItem key={"lastEdited"}>
-            <DateInfoBlock>Last Edited</DateInfoBlock>
+            <DateLabelBlock>Last Edited</DateLabelBlock>
             <DateInfoBlock>{props.lastEdited.toISOString()}</DateInfoBlock>
           </ListItem>
         )}
@@ -89,3 +106,5 @@ export const DetailsList: React.FC<DetailsListProps> = (props: DetailsListProps)
     </Container>
   );
 };
+
+EntityDetailsView.displayName = "EntityDetailsView";

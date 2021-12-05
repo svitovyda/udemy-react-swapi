@@ -1,24 +1,22 @@
 import * as React from "react";
-import { DataProvider } from "../../services/DataProvider";
-import { EntitiesListController, PageProps } from "../entities/EntitiesListController";
-import { useParams } from "react-router-dom";
+import { WithDataListProps } from "../entities/utils";
+import { withData } from "../entities/WithData";
+import { EntitiesListView } from "../entities/EntitiesListView";
+import { loadPageController } from "../entities/hooks";
 
-export const PlanetsList: React.FC = () => {
-  const [dataProvider, setDataProvider] = React.useState<DataProvider | undefined>(undefined);
-  DataProvider.getInstance().then(setDataProvider);
+const Planets: React.FC<WithDataListProps> = (props: WithDataListProps) => {
 
-  const { page } = useParams<PageProps>();
+  const { data, dataProvider } = props;
+
+  loadPageController(dataProvider.getPlanets, props);
 
   return (
-    dataProvider ? (
-      <EntitiesListController
-        page={page}
-        entitiesFetcher={dataProvider.getPlanets}
-        entityUrlId="planets"
-        filmFetcher={dataProvider.getFilm}
-      />
-    ) : <>Loading...</>
+    <>
+      {(!!data && <EntitiesListView data={data} entityUrlId="planets" />)}
+    </>
   );
 };
+Planets.displayName = "Planets";
 
+export const PlanetsList = withData(Planets);
 PlanetsList.displayName = "PlanetsList";

@@ -1,4 +1,4 @@
-import { EntitiesPage, Entity, Film, Person, Planet, Starship } from "../models/entities";
+import { EntitiesPage, Entity, Film, PartOfFilm, Person, Planet, Starship } from "../models/entities";
 import { Cache } from "./helpers/Cache";
 import { SwapiService } from "./SwapiService";
 
@@ -9,6 +9,19 @@ const ENTITY_MAX = 20;
 interface EntitiesWithInfo<T extends Entity> {
   entities: T[];
   count: number;
+}
+
+export interface ShortEntity {
+  id: string;
+  name: string;
+  films: string[];
+}
+
+export interface ShortPage {
+  page: number;
+  next: boolean;
+  previous: boolean;
+  result: ShortEntity[];
 }
 
 const INITIALIZATION_ERROR = new Error("Initialization error");
@@ -128,6 +141,29 @@ export class DataProvider {
       return page;
     };
 
+  getFilmsForEntity = async (entity: PartOfFilm): Promise<Film[]> => Promise.all(entity.films.map(this.getFilm)); // .filter((f) => !!f);
+
+  protected entityToShort = async (entity: PartOfFilm): Promise<ShortEntity> =>
+    this.getFilmsForEntity(entity)
+      .then((a) => a.map((f) => `${f.name} (${f.releaseDate.getFullYear()})`))
+      .catch((e) => {
+        console.error(e);
+        return [];
+      })
+      .then((films) => ({
+        id: entity.id,
+        name: entity.name,
+        films: films.filter((f) => !!f)
+      }));
+
+  protected fetchListWithFilms = async (page: EntitiesPage<PartOfFilm>): Promise<ShortPage> =>
+    Promise.all(page.results.map(this.entityToShort)).then((shorts) => ({
+      page: page.page,
+      previous: page.previous,
+      next: page.next,
+      result: shorts
+    }));
+
   getPlanet = async (id: string): Promise<Planet> => this.getEntity(id, this.planets, this.swapiService?.getPlanet);
 
   getPerson = async (id: string): Promise<Person> => this.getEntity(id, this.people, this.swapiService?.getPerson);
@@ -137,14 +173,17 @@ export class DataProvider {
   getStarship = async (id: string): Promise<Starship> =>
     this.getEntity(id, this.starships, this.swapiService?.getStarship);
 
-  getPeople = async (page?: number): Promise<EntitiesPage<Person>> =>
-    this.swapiService?.getPeople(page).then(this.cachePage(this.people)) ?? Promise.reject(INITIALIZATION_ERROR);
+  getPeople = async (page?: number): Promise<ShortPage> =>
+    this.swapiService?.getPeople(page).then(this.cachePage(this.people)).then(this.fetchListWithFilms) ??
+    Promise.reject(INITIALIZATION_ERROR);
 
-  getPlanets = async (page?: number): Promise<EntitiesPage<Planet>> =>
-    this.swapiService?.getPlanets(page).then(this.cachePage(this.planets)) ?? Promise.reject(INITIALIZATION_ERROR);
+  getPlanets = async (page?: number): Promise<ShortPage> =>
+    this.swapiService?.getPlanets(page).then(this.cachePage(this.planets)).then(this.fetchListWithFilms) ??
+    Promise.reject(INITIALIZATION_ERROR);
 
-  getStarships = async (page?: number): Promise<EntitiesPage<Starship>> =>
-    this.swapiService?.getStarships(page).then(this.cachePage(this.starships)) ?? Promise.reject(INITIALIZATION_ERROR);
+  getStarships = async (page?: number): Promise<ShortPage> =>
+    this.swapiService?.getStarships(page).then(this.cachePage(this.starships)).then(this.fetchListWithFilms) ??
+    Promise.reject(INITIALIZATION_ERROR);
 
   getPlanetsCount = (): number | undefined => this.planetsCount;
 

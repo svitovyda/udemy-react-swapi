@@ -1,24 +1,21 @@
-import { Film, PartOfFilm } from "../../models/entities";
+import { PartOfFilm } from "../../models/entities";
+import { ShortPage } from "../../services/DataProvider";
+import { ElementProps, WithDataProps } from "./WithData";
+import { EntityDetailsWithFilms } from "./EntityDetails";
 
-export type Data<T> = "error" | "loading" | T;
-
-export interface EntityShort {
-  id: string;
-  name: string;
-  films: string[];
+export interface Data<T> {
+  loading?: boolean;
+  value?: T;
+  error?: Error;
 }
 
-export const getAllFilms = async (entity: PartOfFilm, filmFetcher: (id: string) => Promise<Film>): Promise<string[]> =>
-  (await Promise.all(entity.films.map((f) => filmFetcher(f).then((f) => f.name)))).filter((f) => !!f);
+export interface RoutePageProps {
+  page?: string;
+}
 
-export const entityToShort =
-  (filmFetcher: (id: string) => Promise<Film>) =>
-  async (entity: PartOfFilm): Promise<EntityShort> =>
-    getAllFilms(entity, filmFetcher).then((films) => ({
-      id: entity.id,
-      name: entity.name,
-      films
-    }));
+export interface RouteEntityProps {
+  id?: string;
+}
 
 export const displayNumber = (num: number | undefined, stringOnZero?: string): string => {
   if (Number.isNaN(num)) return "Unknown";
@@ -26,3 +23,11 @@ export const displayNumber = (num: number | undefined, stringOnZero?: string): s
   if (num === 0 && stringOnZero !== undefined) return stringOnZero;
   return num.toString();
 };
+
+export const validatePage = (page: number): boolean => !(Number.isNaN(page) || !Number.isInteger(page) || page < 1)
+
+export const pageToNumber = (page?: string): number => page ? Number(page) : 1;
+
+export type WithDataListProps = WithDataProps<ShortPage, ElementProps>;
+
+export type WithDataDetailsProps<T extends PartOfFilm> = WithDataProps<EntityDetailsWithFilms<T>, ElementProps>;

@@ -1,4 +1,3 @@
-
 export class Cache<T> {
   private values: Map<string, T> = new Map();
   private max: number;
@@ -16,7 +15,7 @@ export class Cache<T> {
     }
     this.values.set(key, value);
     return value;
-  }
+  };
 
   public clean = (): void => this.values.clear();
 

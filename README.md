@@ -4,7 +4,12 @@ A project inspired by example in one of React courses on udemy, reworked on `typ
 cool features than were used in the course.
 
 A test application that renders data about Star Wars characters, planets and starships.
-Depends on fork of Paul Hallett https://github.com/phalt/swapi - https://swapi.dev/
+Depends on fork of Paul Hallett https://github.com/phalt/swapi - https://swapi.dev/.
+
+In a first iteration I created oldschool plane classes that handle some lifecycle business logic; wrote all the components
+as functional, on TypeScript.
+
+In next iterations I want to use Contexts, more of the hooks combination and possibly Redux.
 
 
 ## Requires
@@ -19,7 +24,6 @@ optional - `http-server` `npm` package
 - `yarn` package manager
 - `Husky`/`Prettier`/`ESLint` code/formatting checking
 - `jest` unit testing
-- style - Darkly from https://bootswatch.com/
 
 ## How to use
 - clone
@@ -38,3 +42,7 @@ Optional: `npx http-server ./output` and navigate to `http://127.0.0.1:8080` to 
 To debug tests in VS, see https://code.visualstudio.com/docs/editor/debugging#_launch-configurations
 
 _Note:_ having `yarn.lock` in the repository helps team to make sure everyone uses absolutely the same packages versions
+
+## Assets and styles
+- Death Star SVG by Nichole Kazarinoff from the Noun Project
+- Darkly from https://bootswatch.com/
