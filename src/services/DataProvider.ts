@@ -35,44 +35,11 @@ export class DataProvider {
   protected starships: Cache<Starship> = new Cache(ENTITY_MAX);
   protected starshipsCount?: number;
 
-  private resolve: (d: DataProvider) => void;
-  private reject: (e: Error) => void;
+  private swapiService: SwapiService;
 
-  private swapiService: SwapiService | undefined;
-
-  private static instance: DataProvider;
-
-  private promise: Promise<DataProvider>;
-
-  private constructor() {
-    this.resolve = () => {
-      throw INITIALIZATION_ERROR;
-    };
-    this.reject = () => {
-      throw INITIALIZATION_ERROR;
-    };
-    this.swapiService = undefined;
-    this.promise = new Promise((resolve, reject) => {
-      this.resolve = resolve;
-      this.reject = reject;
-    });
+  constructor(swapiService: SwapiService) {
+    this.swapiService = swapiService;
   }
-
-  static getInstance = (): Promise<DataProvider> => {
-    if (!DataProvider.instance) {
-      DataProvider.instance = new DataProvider();
-    }
-    return DataProvider.instance.promise;
-  };
-
-  static init = async (swapiService: SwapiService): Promise<DataProvider> => {
-    if (!DataProvider.instance) {
-      DataProvider.instance = new DataProvider();
-    }
-    if (DataProvider.instance.swapiService === swapiService) return Promise.resolve(DataProvider.instance);
-    await DataProvider.instance.init(swapiService);
-    return await DataProvider.instance.promise;
-  };
 
   getPagesTillMax = async <T extends Entity>(
     max: number,
@@ -97,31 +64,28 @@ export class DataProvider {
       .then(recursiveFunction);
   };
 
-  protected init = async (swapiService: SwapiService) => {
+  init = async (): Promise<void> => {
     await Promise.all([
-      this.getPagesTillMax(FILMS_MAX, swapiService.getFilms).then((films) => {
+      this.getPagesTillMax(FILMS_MAX, this.swapiService.getFilms).then((films) => {
         this.filmsCount = films.count;
         films.entities.forEach((f) => this.films.add(f.id, f));
       }),
 
-      this.getPagesTillMax(PLANETS_MAX, swapiService.getPlanets).then((planets) => {
+      this.getPagesTillMax(PLANETS_MAX, this.swapiService.getPlanets).then((planets) => {
         this.planetsCount = planets.count;
         planets.entities.forEach((p) => this.planets.add(p.id, p));
       }),
 
-      swapiService.getPeople().then((people) => {
+      this.swapiService.getPeople().then((people) => {
         this.peopleCount = people.count;
         people.results.forEach((p) => this.people.add(p.id, p));
       }),
 
-      swapiService.getStarships().then((ships) => {
+      this.swapiService.getStarships().then((ships) => {
         this.starshipsCount = ships.count;
         ships.results.forEach((s) => this.starships.add(s.id, s));
       })
     ])
-      .then(() => this.resolve(DataProvider.instance))
-      .catch((e) => this.reject(e));
-    this.swapiService = swapiService;
   };
 
   protected getEntity = async <T extends Entity>(

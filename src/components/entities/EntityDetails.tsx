@@ -3,6 +3,7 @@ import { PartOfFilm, Film } from "../../models/entities";
 import { ElementProps, WithDataProps } from "./WithData";
 import { EntityDetailsView, EntityDetail } from "./EntityDetailsView";
 import { useRouteId } from "./hooks";
+import { DataProviderContext } from "../main/App";
 
 export interface EntityDetailsWithFilms<T extends PartOfFilm> {
   entity: T;
@@ -18,7 +19,8 @@ export interface EntityDetailsProps<T extends PartOfFilm> extends WithDataProps<
 
 export const EntityDetails = <T extends PartOfFilm>(props: EntityDetailsProps<T>) => {
   const { id, error } = useRouteId();
-  const { data, onData, onError, onLoading, dataProvider, entityFetcher, isLoading, imgBase, isError } = props;
+  const dataProvider = React.useContext(DataProviderContext);
+  const { data, onData, onError, onLoading, entityFetcher, isLoading, imgBase, isError } = props;
 
   React.useEffect(() => {
     if (!data && !isLoading && !isError) {

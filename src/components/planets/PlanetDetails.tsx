@@ -5,6 +5,7 @@ import { EntityDetails, EntityDetailsWithFilms } from "../entities/EntityDetails
 import { EntityDetail } from "../entities/EntityDetailsView";
 import { withData } from "../entities/WithData";
 import { DataProvider } from "../../services/DataProvider";
+import { ConfigContext, DataProviderContext } from "../main/App";
 
 const planetToDetails = async (planet: Planet, dataProvider: DataProvider): Promise<EntityDetail[]> => {
   const details: EntityDetail[] = [
@@ -20,8 +21,11 @@ const planetToDetails = async (planet: Planet, dataProvider: DataProvider): Prom
 }
 
 const PlanetRenderer: React.FC<WithDataDetailsProps<Planet>> = (props: WithDataDetailsProps<Planet>) => {
+  const settings = React.useContext(ConfigContext);
+  const dataProvider = React.useContext(DataProviderContext);
+
   const { onData, ...rest } = props;
-  const { dataProvider, onError, onLoading, settings } = rest;
+  const { onError, onLoading } = rest;
 
   const onEntityData = React.useCallback((data: EntityDetailsWithFilms<Planet>) => {
     onLoading();

@@ -5,6 +5,7 @@ import { EntityDetails, EntityDetailsWithFilms } from "../entities/EntityDetails
 import { EntityDetail } from "../entities/EntityDetailsView";
 import { withData } from "../entities/WithData";
 import { DataProvider } from "../../services/DataProvider";
+import { ConfigContext, DataProviderContext } from "../main/App";
 
 const starshipToDetails = async (starship: Starship, dataProvider: DataProvider): Promise<EntityDetail[]> => {
   const details: EntityDetail[] = [
@@ -23,7 +24,9 @@ const starshipToDetails = async (starship: Starship, dataProvider: DataProvider)
 
 const StarshipRenderer: React.FC<WithDataDetailsProps<Starship>> = (props: WithDataDetailsProps<Starship>) => {
   const { onData, ...rest } = props;
-  const { dataProvider, onError, onLoading, settings } = rest;
+  const settings = React.useContext(ConfigContext);
+  const dataProvider = React.useContext(DataProviderContext);
+  const { onError, onLoading } = rest;
 
   const onEntityData = React.useCallback((data: EntityDetailsWithFilms<Starship>) => {
     onLoading();

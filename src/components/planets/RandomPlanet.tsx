@@ -3,6 +3,7 @@ import { Planet } from "../../models/entities";
 import { DataProvider } from "../../services/DataProvider";
 import { RandomPlanetView } from "./RandomPlanetView";
 import { ElementProps, withData, WithDataProps } from "../entities/WithData";
+import { ConfigContext, DataProviderContext } from "../main/App";
 
 const MAX_ATTEMPTS = 10;
 
@@ -41,7 +42,9 @@ const getRandomPlanet = async (dataProvider: DataProvider, current?: Planet): Pr
 };
 
 const RandomPlanetRenderer: React.FC<WithDataProps<Planet, ElementProps>> = (props: WithDataProps<Planet, ElementProps>) => {
-  const { settings, dataProvider, onData, onError, onLoading, data, isLoading } = props;
+  const settings = React.useContext(ConfigContext);
+  const dataProvider = React.useContext(DataProviderContext);
+  const { onData, onError, onLoading, data, isLoading } = props;
 
   const getNext = React.useCallback(() => {
     onLoading();

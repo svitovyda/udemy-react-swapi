@@ -1,4 +1,4 @@
-import { ConfigService } from "./ConfigService";
+import { Config } from "./ConfigService";
 import {
   convertPerson,
   convertPlanet,
@@ -29,12 +29,14 @@ class HTTPFetcher implements RemoteFetcher {
 
 export class SwapiService {
   protected fetcher: RemoteFetcher;
+  protected config: Config;
+  protected baseUrl: string = "";
 
-  constructor(fetcher: RemoteFetcher = new HTTPFetcher()) {
+  constructor(config: Config, fetcher: RemoteFetcher = new HTTPFetcher()) {
     this.fetcher = fetcher;
+    this.config = config;
+    this.baseUrl = config.baseUrl;
   }
-
-  protected baseUrl = ConfigService.getConfig().baseUrl;
 
   protected getResource = async <T>(props: string): Promise<T> => {
     const url = `http://${this.baseUrl}/api/${props}`;

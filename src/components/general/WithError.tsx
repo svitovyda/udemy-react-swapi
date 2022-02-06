@@ -1,30 +1,16 @@
 import React from "react";
-import styled from "@emotion/styled";
 import { ErrorIndicator } from "./ErrorIndicator";
-
-const Container = styled.div({
-  display: "flex",
-  justifyContent: "center",
-  alignContent: "center",
-  alignItems: "center",
-  width: "100%",
-  height: "100%"
-});
-
 export interface WithErrorProps extends React.HTMLAttributes<HTMLElement> {
-  error?: Error;
+  error?: Error | string | boolean;
 }
 
-export const WithError = React.memo((props: WithErrorProps) => {
-  if (props.error) {
-    console.error(props.error);
-    return (
-      <Container>
-        <ErrorIndicator />
-      </Container>
-    );
+export const WithError: React.FC<WithErrorProps> = (props: WithErrorProps) => {
+  if (!props.error) return <>{props.children}</>;
+  if (props.error !== true && props.error !== "") {
+    const errorObj = typeof props.error === "object" ? props.error : new Error(props.error);
+    console.error(errorObj);
   }
-  return <>{props.children}</>;
-});
+  return <ErrorIndicator />
+};
 
 WithError.displayName = "WithError";

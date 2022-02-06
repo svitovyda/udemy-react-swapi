@@ -5,6 +5,7 @@ import { EntityDetails, EntityDetailsWithFilms } from "../entities/EntityDetails
 import { EntityDetail } from "../entities/EntityDetailsView";
 import { withData } from "../entities/WithData";
 import { DataProvider } from "../../services/DataProvider";
+import { ConfigContext, DataProviderContext } from "../main/App";
 
 const personToDetails = async (
   person: Person,
@@ -26,8 +27,10 @@ const personToDetails = async (
 };
 
 const PersonRenderer: React.FC<WithDataDetailsProps<Person>> = (props: WithDataDetailsProps<Person>) => {
+  const settings = React.useContext(ConfigContext);
+  const dataProvider = React.useContext(DataProviderContext);
   const { onData, ...rest } = props;
-  const { dataProvider, onError, onLoading, settings } = rest;
+  const { onError, onLoading } = rest;
 
   const onEntityData = React.useCallback((data: EntityDetailsWithFilms<Person>) => {
     onLoading();

@@ -3,9 +3,11 @@ import { WithDataListProps } from "../entities/utils";
 import { withData } from "../entities/WithData";
 import { EntitiesListView } from "../entities/EntitiesListView";
 import { loadPageController } from "../entities/hooks";
+import { DataProviderContext } from "../main/App";
 
 const Starships: React.FC<WithDataListProps> = (props: WithDataListProps) => {
-  const { data, dataProvider } = props;
+  const dataProvider = React.useContext(DataProviderContext);
+  const { data } = props;
 
   loadPageController(dataProvider.getStarships, props);
 

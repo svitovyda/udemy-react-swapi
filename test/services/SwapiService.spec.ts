@@ -1,3 +1,4 @@
+import { Config } from "../../src/services/ConfigService";
 import { SwapiService, RemoteFetcher } from "../../src/services/SwapiService";
 import { when } from "jest-when";
 import films from "../__mock__/films.json";
@@ -18,53 +19,60 @@ const mockFetcher: RemoteFetcher = {
   get: jest.fn()
 };
 
+const mockConfig: Config = {
+  baseUrl: "testBaseUrl",
+  personAssetsUrl: "testPersonAssetsUrl",
+  planetAssetsUrl: "testPlanetAssetsUrl",
+  starshipAssetsUrl: "testStarshipAssetsUrl"
+}
+
 describe("SwapiService", () => {
-  const service =  new SwapiService(mockFetcher);
+  const service =  new SwapiService(mockConfig, mockFetcher);
 
   beforeAll(() => {
     const spied = jest.spyOn(mockFetcher, "get");
 
     when(spied)
-      .calledWith("http://swapi.dev/api/films/")
+      .calledWith("http://testBaseUrl/api/films/")
       .mockReturnValue(films as any);
-    when(spied).calledWith("http://swapi.dev/api/films/?page=2").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/films/?page=2").mockRejectedValue(new Error("404, Not found"));
     when(spied)
-      .calledWith("http://swapi.dev/api/films/1/")
+      .calledWith("http://testBaseUrl/api/films/1/")
       .mockReturnValue(films.results[0] as any);
-    when(spied).calledWith("http://swapi.dev/api/films/a/").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/films/a/").mockRejectedValue(new Error("404, Not found"));
 
     when(spied)
-      .calledWith("http://swapi.dev/api/people/")
+      .calledWith("http://testBaseUrl/api/people/")
       .mockReturnValue(peopleJsonP1 as any);
     when(spied)
-      .calledWith("http://swapi.dev/api/people/?page=2")
+      .calledWith("http://testBaseUrl/api/people/?page=2")
       .mockReturnValue(peopleJsonP2 as any);
     when(spied)
-      .calledWith("http://swapi.dev/api/people/1/")
+      .calledWith("http://testBaseUrl/api/people/1/")
       .mockReturnValue(peopleJsonTyped.results[0] as any);
-    when(spied).calledWith("http://swapi.dev/api/people/a/").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/people/a/").mockRejectedValue(new Error("404, Not found"));
 
     when(spied)
-      .calledWith("http://swapi.dev/api/planets/")
+      .calledWith("http://testBaseUrl/api/planets/")
       .mockReturnValue(planetsJsonP1 as any);
     when(spied)
-      .calledWith("http://swapi.dev/api/planets/?page=2")
+      .calledWith("http://testBaseUrl/api/planets/?page=2")
       .mockReturnValue(planetsJsonP2 as any);
     when(spied)
-      .calledWith("http://swapi.dev/api/planets/1/")
+      .calledWith("http://testBaseUrl/api/planets/1/")
       .mockReturnValue(planetsJsonTyped.results[0] as any);
-    when(spied).calledWith("http://swapi.dev/api/planets/a/").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/planets/a/").mockRejectedValue(new Error("404, Not found"));
 
     when(spied)
-      .calledWith("http://swapi.dev/api/starships/")
+      .calledWith("http://testBaseUrl/api/starships/")
       .mockReturnValue(starshipsJsonP1 as any);
     when(spied)
-      .calledWith("http://swapi.dev/api/starships/?page=4")
+      .calledWith("http://testBaseUrl/api/starships/?page=4")
       .mockReturnValue(starshipsJsonP4 as any);
     when(spied)
-      .calledWith("http://swapi.dev/api/starships/2/")
+      .calledWith("http://testBaseUrl/api/starships/2/")
       .mockReturnValue(starshipsJsonTyped.results[0] as any);
-    when(spied).calledWith("http://swapi.dev/api/starships/a/").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/starships/a/").mockRejectedValue(new Error("404, Not found"));
   });
 
   afterAll(() => {});
