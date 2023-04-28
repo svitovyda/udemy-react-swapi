@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Planet } from "../../models/entities";
 import { DataProvider } from "../../services/DataProvider";
-import { RandomPlanetView } from "./RandomPlanetView";
-import { ElementProps, withData, WithDataProps } from "../entities/WithData";
+import { ElementProps as ElementProperties, withData, WithDataProps as WithDataProperties } from "../entities/WithData";
 import { ConfigContext, DataProviderContext } from "../main/App";
+import { RandomPlanetView } from "./RandomPlanetView";
 
 const MAX_ATTEMPTS = 10;
 
@@ -14,7 +14,7 @@ const getRandomPlanet = async (dataProvider: DataProvider, current?: Planet): Pr
   const generateNewId = (invalid: string[], attempts: number): string => {
     if (attempts < 1) return "2";
     const id = Math.ceil(Math.random() * (maxPlanets + 5)).toString();
-    if (invalid.indexOf(id) === -1) return id;
+    if (!invalid.includes(id)) return id;
     return generateNewId([...invalid, id], attempts - 1);
   };
 
@@ -26,13 +26,11 @@ const getRandomPlanet = async (dataProvider: DataProvider, current?: Planet): Pr
   const recursiveFunction = async (aggr: Aggr): Promise<Planet> => {
     if (aggr.attempts < 1) throw new Error(`Can't fetch a valid planed after ${MAX_ATTEMPTS} attempts`);
     const newId = generateNewId(aggr.invalid, MAX_ATTEMPTS);
-    if (aggr.invalid.indexOf(newId) !== -1) throw new Error(`Can't fetch a valid planed after ${MAX_ATTEMPTS} attempts`);
-    return await dataProvider
-      .getPlanet(newId)
-      .then((planet) => {
-        if (planet) return planet;
-        return recursiveFunction({ attempts: aggr.attempts - 1, invalid: [...aggr.invalid, newId] });
-      });
+    if (aggr.invalid.includes(newId)) throw new Error(`Can't fetch a valid planed after ${MAX_ATTEMPTS} attempts`);
+    return await dataProvider.getPlanet(newId).then((planet) => {
+      if (planet) return planet;
+      return recursiveFunction({ attempts: aggr.attempts - 1, invalid: [...aggr.invalid, newId] });
+    });
   };
 
   return recursiveFunction({
@@ -41,24 +39,28 @@ const getRandomPlanet = async (dataProvider: DataProvider, current?: Planet): Pr
   });
 };
 
-const RandomPlanetRenderer: React.FC<WithDataProps<Planet, ElementProps>> = (props: WithDataProps<Planet, ElementProps>) => {
+const RandomPlanetRenderer: React.FC<WithDataProperties<Planet, ElementProperties>> = (
+  properties: WithDataProperties<Planet, ElementProperties>
+) => {
   const settings = React.useContext(ConfigContext);
   const dataProvider = React.useContext(DataProviderContext);
-  const { onData, onError, onLoading, data, isLoading } = props;
+  const { onData, onError, onLoading, data, isLoading } = properties;
 
   const getNext = React.useCallback(() => {
     onLoading();
-    getRandomPlanet(dataProvider, data).then((p) => {
-      console.log(p);
-      onData(p);
-    }).catch(onError);
-  }, [props]);
+    getRandomPlanet(dataProvider, data)
+      .then((p) => {
+        console.log(p);
+        onData(p);
+      })
+      .catch(onError);
+  }, [onLoading, dataProvider, data, onError, onData]);
 
   React.useEffect(() => {
-    if (!props.data && !props.isLoading) {
+    if (!properties.data && !properties.isLoading) {
       getNext();
     }
-  }, [getNext, props.data]);
+  }, [getNext, properties.data, properties.isLoading]);
 
   const onShowRanomPlanet = React.useCallback(getNext, [getNext]);
 

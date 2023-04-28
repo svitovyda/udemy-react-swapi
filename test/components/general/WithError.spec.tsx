@@ -1,3 +1,4 @@
+import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
 import { WithError } from "../../../src/components/general/WithError";
@@ -9,30 +10,30 @@ describe("WithError", () => {
 
   it("Shows fun error text, not error message", () => {
     render(<WithError error={new Error("Ups")} />);
-    expect(screen.queryAllByText("BOOM!")).toHaveLength(1);
-    expect(screen.queryAllByText("Ups")).toHaveLength(0);
+    expect(screen.queryByText("BOOM!")).toBeInTheDocument();
+    expect(screen.queryByText("Ups")).not.toBeInTheDocument();
 
     render(<WithError error="Ups" />);
     expect(screen.queryAllByText("BOOM!")).toHaveLength(2);
-    expect(screen.queryAllByText("Ups")).toHaveLength(0);
+    expect(screen.queryByText("Ups")).not.toBeInTheDocument();
 
     render(<WithError error />);
     expect(screen.queryAllByText("BOOM!")).toHaveLength(3);
-    expect(screen.queryAllByText("Ups")).toHaveLength(0);
+    expect(screen.queryByText("Ups")).not.toBeInTheDocument();
   });
 
   it("Shows no error indicator if no error, no children", () => {
     render(<WithError />);
-    expect(screen.queryAllByText("BOOM!")).toHaveLength(0);
+    expect(screen.queryByText("BOOM!")).not.toBeInTheDocument();
 
     render(<WithError error={undefined} />);
-    expect(screen.queryAllByText("BOOM!")).toHaveLength(0);
+    expect(screen.queryByText("BOOM!")).not.toBeInTheDocument();
 
     render(<WithError error={false} />);
-    expect(screen.queryAllByText("BOOM!")).toHaveLength(0);
+    expect(screen.queryByText("BOOM!")).not.toBeInTheDocument();
 
     render(<WithError error="" />);
-    expect(screen.queryAllByText("BOOM!")).toHaveLength(0);
+    expect(screen.queryByText("BOOM!")).not.toBeInTheDocument();
   });
 
   it("Shows content if no error", () => {
@@ -42,9 +43,9 @@ describe("WithError", () => {
         <div>Info</div>
       </WithError>
     );
-    expect(screen.queryAllByText("BOOM!")).toHaveLength(0);
-    expect(screen.queryAllByText("Content")).toHaveLength(1);
-    expect(screen.queryAllByText("Info")).toHaveLength(1);
+    expect(screen.queryByText("BOOM!")).not.toBeInTheDocument();
+    expect(screen.queryByText("Content")).toBeInTheDocument();
+    expect(screen.queryByText("Info")).toBeInTheDocument();
 
     render(
       <WithError error={false}>
@@ -52,7 +53,7 @@ describe("WithError", () => {
         <div>Info</div>
       </WithError>
     );
-    expect(screen.queryAllByText("BOOM!")).toHaveLength(0);
+    expect(screen.queryByText("BOOM!")).not.toBeInTheDocument();
     expect(screen.queryAllByText("Content")).toHaveLength(2);
     expect(screen.queryAllByText("Info")).toHaveLength(2);
 
@@ -62,7 +63,7 @@ describe("WithError", () => {
         <div>Info</div>
       </WithError>
     );
-    expect(screen.queryAllByText("BOOM!")).toHaveLength(0);
+    expect(screen.queryByText("BOOM!")).not.toBeInTheDocument();
     expect(screen.queryAllByText("Content")).toHaveLength(3);
     expect(screen.queryAllByText("Info")).toHaveLength(3);
   });
@@ -74,9 +75,9 @@ describe("WithError", () => {
         <div>Info</div>
       </WithError>
     );
-    expect(screen.queryAllByText("BOOM!")).toHaveLength(1);
-    expect(screen.queryAllByText("Content")).toHaveLength(0);
-    expect(screen.queryAllByText("Info")).toHaveLength(0);
+    expect(screen.queryByText("BOOM!")).toBeInTheDocument();
+    expect(screen.queryByText("Content")).not.toBeInTheDocument();
+    expect(screen.queryByText("Info")).not.toBeInTheDocument();
 
     render(
       <WithError error="Ups">
@@ -85,8 +86,8 @@ describe("WithError", () => {
       </WithError>
     );
     expect(screen.queryAllByText("BOOM!")).toHaveLength(2);
-    expect(screen.queryAllByText("Content")).toHaveLength(0);
-    expect(screen.queryAllByText("Info")).toHaveLength(0);
+    expect(screen.queryByText("Content")).not.toBeInTheDocument();
+    expect(screen.queryByText("Info")).not.toBeInTheDocument();
 
     render(
       <WithError error>
@@ -95,7 +96,7 @@ describe("WithError", () => {
       </WithError>
     );
     expect(screen.queryAllByText("BOOM!")).toHaveLength(3);
-    expect(screen.queryAllByText("Content")).toHaveLength(0);
-    expect(screen.queryAllByText("Info")).toHaveLength(0);
+    expect(screen.queryByText("Content")).not.toBeInTheDocument();
+    expect(screen.queryByText("Info")).not.toBeInTheDocument();
   });
 });

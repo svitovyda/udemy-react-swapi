@@ -1,18 +1,18 @@
-import * as React from "react";
 import styled from "@emotion/styled";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Header, HeaderItem } from "./Header";
-import { SwapiService } from "../../services/SwapiService";
-import { MainPage } from "./MainPage";
-import { PersonDetails } from "../people/PersonDetails";
-import { StarshipDetails } from "../starships/StarshipDetails";
-import { DataProvider } from "../../services/DataProvider";
-import { PlanetDetails } from "../planets/PlanetDetails";
-import { PeopleList } from "../people/PeopleList";
-import { PlanetsList } from "../planets/PlanetsList";
-import { StarshipsList } from "../starships/StarshipsList";
-import { WithLoaderAndError } from "../general/WithLoaderAndError";
+import * as React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Config, ConfigService } from "../../services/ConfigService";
+import { DataProvider } from "../../services/DataProvider";
+import { SwapiService } from "../../services/SwapiService";
+import { WithLoaderAndError } from "../general/WithLoaderAndError";
+import { PeopleList } from "../people/PeopleList";
+import { PersonDetails } from "../people/PersonDetails";
+import { PlanetDetails } from "../planets/PlanetDetails";
+import { PlanetsList } from "../planets/PlanetsList";
+import { StarshipDetails } from "../starships/StarshipDetails";
+import { StarshipsList } from "../starships/StarshipsList";
+import { Header, HeaderItem } from "./Header";
+import { MainPage } from "./MainPage";
 
 const AppContainer = styled.div({
   width: "80%",
@@ -43,12 +43,13 @@ export const ConfigContext = React.createContext<Config>(config);
 export const DataProviderContext = React.createContext<DataProvider>(dataProvider);
 
 const App: React.FC = () => {
-  const [error, setError] = React.useState<Error | undefined>(undefined);
+  const [error, setError] = React.useState<Error | undefined>();
   const [loading, setLoading] = React.useState(true);
 
-  dataProvider.init()
+  dataProvider
+    .init()
     .then(() => setLoading(false))
-    .catch((e) => setError(e));
+    .catch((error_) => setError(error_));
 
   const items: HeaderItem[] = [
     {
@@ -68,7 +69,7 @@ const App: React.FC = () => {
   return (
     <AppContainer>
       <WithLoaderAndError loading={loading} error={error}>
-        <Router>
+        <BrowserRouter>
           <HeaderNav>
             <Header items={items} />
           </HeaderNav>
@@ -76,35 +77,24 @@ const App: React.FC = () => {
           <ConfigContext.Provider value={config}>
             <DataProviderContext.Provider value={dataProvider}>
               <AppMainPage>
-                <Switch>
-                  <Route path="/" exact component={MainPage} />
-                </Switch>
+                <Routes>
+                  <Route path="/" element={<MainPage />} />
+                </Routes>
               </AppMainPage>
-
               <AppComponents>
-                <Switch>
-                  <Route exact path="/people/:page" component={PeopleList} />
-                </Switch>
-                <Switch>
-                  <Route exact path="/people/details/:id" component={PersonDetails} />
-                </Switch>
-                <Switch>
-                  <Route exact path="/planets/:page" component={PlanetsList} />
-                </Switch>
-                <Switch>
-                  <Route exact path="/planets/details/:id" component={PlanetDetails} />
-                </Switch>
-                <Switch>
-                  <Route exact path="/starships/:page" component={StarshipsList} />
-                </Switch>
-                <Switch>
-                  <Route exact path="/starships/details/:id" component={StarshipDetails} />
-                </Switch>
+                <Routes>
+                  <Route path="/people/:page" Component={PeopleList} />
+                  <Route path="/people/details/:id" Component={PersonDetails} />
+                  <Route path="/planets/:page" Component={PlanetsList} />
+                  <Route path="/planets/details/:id" Component={PlanetDetails} />
+                  <Route path="/starships/:page" Component={StarshipsList} />
+                  <Route path="/starships/details/:id" Component={StarshipDetails} />
+                  <Route path="*" Component={PeopleList} />
+                </Routes>
               </AppComponents>
             </DataProviderContext.Provider>
           </ConfigContext.Provider>
-
-        </Router>
+        </BrowserRouter>
       </WithLoaderAndError>
     </AppContainer>
   );

@@ -1,8 +1,8 @@
-import * as React from "react";
 import styled from "@emotion/styled";
+import { rgba } from "emotion-rgba";
+import * as React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Search } from "../general/Search";
-import { rgba } from "emotion-rgba";
 
 export interface HeaderItem {
   caption: String;
@@ -45,52 +45,52 @@ const List = styled.ul({
   margin: 0
 });
 
-const ListElement = styled.li((props: React.DOMAttributes<HTMLLIElement> & { selected: boolean }) => ({
+const ListElement = styled.li((properties: React.DOMAttributes<HTMLLIElement> & { selected: boolean }) => ({
   display: "inline",
   padding: "2px 32px",
   borderWidth: 1,
   borderColor: rgba("#f1e9e9", 0.459),
   borderRightStyle: "groove",
   ":hover": {
-    backgroundColor: props.selected ? "unset" : "grey"
+    backgroundColor: properties.selected ? "unset" : "grey"
   },
   ":first-of-type": {
     borderLeftStyle: "groove"
   }
 }));
 
-const LinkElement = styled(Link)((props: React.DOMAttributes<HTMLAnchorElement> & { selected: boolean }) => ({
+const LinkElement = styled(Link)((properties: React.DOMAttributes<HTMLAnchorElement> & { selected: boolean }) => ({
   fontFamily: "'Open Sans', sans-serif",
   textDecoration: "none",
   userSelect: "none",
   cursor: "pointer",
-  color: props.selected ? "gray" : "#f3f0f0",
+  color: properties.selected ? "gray" : "#f3f0f0",
   ":hover": {
-    color: props.selected ? "grey" : "#fff",
-    borderBottom: props.selected ? "none" : "1px solid #fff"
+    color: properties.selected ? "grey" : "#fff",
+    borderBottom: properties.selected ? "none" : "1px solid #fff"
   }
 }));
 
-export interface HeaderElementProps {
+export interface HeaderElementProperties {
   item: HeaderItem;
   selected: boolean;
 }
 
-const HeaderElement: React.FC<HeaderElementProps> = (props: HeaderElementProps) => {
+const HeaderElement: React.FC<HeaderElementProperties> = (properties: HeaderElementProperties) => {
   return (
-    <ListElement key={props.item.id} selected={props.selected}>
-      <LinkElement selected={props.selected} to={`/${props.item.id}/1`}>
-        {props.item.caption}
+    <ListElement key={properties.item.id} selected={properties.selected}>
+      <LinkElement selected={properties.selected} to={`/${properties.item.id}/1`}>
+        {properties.item.caption}
       </LinkElement>
     </ListElement>
   );
 };
 
-export interface HeaderProps {
+export interface HeaderProperties {
   items: HeaderItem[];
 }
 
-export const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
+export const Header: React.FC<HeaderProperties> = (properties: HeaderProperties) => {
   const location = useLocation();
   return (
     <Nav>
@@ -104,7 +104,7 @@ export const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
       </StarWarsSearch>
       <ListContainer>
         <List>
-          {props.items.map((item) => (
+          {properties.items.map((item) => (
             <HeaderElement item={item} key={item.id} selected={location.pathname.includes(item.id)} />
           ))}
         </List>

@@ -15,23 +15,23 @@ describe("Cache", () => {
 
   it("clean", () => {
     const cache = new Cache<number>(10);
-    [1, 2, 3, 4, 5].forEach(v => cache.add(v.toString(), v));
+    for (const v of [1, 2, 3, 4, 5]) cache.add(v.toString(), v);
     expect(cache.size()).toBe(5);
     cache.clean();
     expect(cache.size()).toBe(0);
-    [1, 2, 3, 4, 5].forEach((v) => expect(cache.get(v.toString())).toBeUndefined());
-    [1, 2, 3, 4, 5].forEach((v) => cache.add(v.toString(), v + 10));
+    for (const v of [1, 2, 3, 4, 5]) expect(cache.get(v.toString())).toBeUndefined();
+    for (const v of [1, 2, 3, 4, 5]) cache.add(v.toString(), v + 10);
     expect(cache.size()).toBe(5);
-    [1, 2, 3, 4, 5].forEach((v) => expect(cache.get(v.toString())).toBe(v + 10));
+    for (const v of [1, 2, 3, 4, 5]) expect(cache.get(v.toString())).toBe(v + 10);
   });
 
   it("handles max size", () => {
     const cache = new Cache<number>(5);
-    [1, 2, 3, 4, 5].forEach((v) => cache.add(v.toString(), v));
+    for (const v of [1, 2, 3, 4, 5]) cache.add(v.toString(), v);
     expect(cache.size()).toBe(5);
     cache.add("6", 6);
     expect(cache.size()).toBe(5);
     expect(cache.get("1")).toBeUndefined();
-    [2, 3, 4, 5, 6].forEach((v) => expect(cache.get(v.toString())).toBe(v));
+    for (const v of [2, 3, 4, 5, 6]) expect(cache.get(v.toString())).toBe(v);
   });
 });

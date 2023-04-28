@@ -1,16 +1,17 @@
 import React from "react";
 import { ErrorIndicator } from "./ErrorIndicator";
-export interface WithErrorProps extends React.HTMLAttributes<HTMLElement> {
+
+export interface WithErrorProperties extends React.HTMLAttributes<HTMLElement> {
   error?: Error | string | boolean;
 }
 
-export const WithError: React.FC<WithErrorProps> = (props: WithErrorProps) => {
-  if (!props.error) return <>{props.children}</>;
-  if (props.error !== true && props.error !== "") {
-    const errorObj = typeof props.error === "object" ? props.error : new Error(props.error);
-    console.error(errorObj);
+export const WithError: React.FC<WithErrorProperties> = (properties: WithErrorProperties) => {
+  if (!properties.error) return <>{properties.children}</>;
+  if (properties.error !== true && properties.error !== "") {
+    const errorObject = typeof properties.error === "object" ? properties.error : new Error(properties.error);
+    console.error(errorObject);
   }
-  return <ErrorIndicator />
+  return <ErrorIndicator />;
 };
 
 WithError.displayName = "WithError";

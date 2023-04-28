@@ -1,5 +1,5 @@
-import * as Swapi from "../swapiModels";
 import { Entity, Person, Planet, Starship, EntitiesPage, Film, PartOfFilm } from "../../models/entities";
+import * as Swapi from "../swapiModels";
 
 export const urlToId = (url: string): string => {
   const match = url.match(/^.+\/api\/\w+\/(\d+)\//);
@@ -20,15 +20,15 @@ export const urlToPage = (url: string): number => {
   return res;
 };
 
-export const convertToNumber = (str: string | undefined): number | undefined => {
-  if (str === undefined) return undefined;
-  let input = str.toLowerCase().trim();
+export const convertToNumber = (string_: string | undefined): number | undefined => {
+  if (string_ === undefined) return undefined;
+  let input = string_.toLowerCase().trim();
   if (!input || input === "undefined") return undefined;
-  if (input === "n/a") return NaN;
+  if (input === "n/a") return Number.NaN;
   if (input === "indefinite") return Number.MAX_VALUE;
   const range = input.indexOf("-");
   if (range > 0) {
-    input = input.substring(0, range);
+    input = input.slice(0, Math.max(0, range));
   }
   input = input.replace(",", ".");
   return Number(input);
@@ -64,12 +64,12 @@ export const convertPerson = (person: Swapi.Person): Person => ({
 export const convertPlanet = (planet: Swapi.Planet): Planet => ({
   ...convertPartOfFilm(planet),
   climate: planet.climate,
-  diameter: convertToNumber(planet.diameter) || NaN,
+  diameter: convertToNumber(planet.diameter) || Number.NaN,
   gravity: planet.gravity,
-  orbitalPeriod: convertToNumber(planet.orbital_period) || NaN,
+  orbitalPeriod: convertToNumber(planet.orbital_period) || Number.NaN,
   population: convertToNumber(planet.population),
-  rotationPeriod: convertToNumber(planet.rotation_period) || NaN,
-  surfaceWater: convertToNumber(planet.surface_water) ?? NaN,
+  rotationPeriod: convertToNumber(planet.rotation_period) || Number.NaN,
+  surfaceWater: convertToNumber(planet.surface_water) ?? Number.NaN,
   terrain: planet.terrain,
   residents: planet.residents.map(urlToId)
 });
@@ -78,15 +78,15 @@ export const convertStarship = (ship: Swapi.Starship): Starship => ({
   ...convertPartOfFilm(ship),
   cargoCapacity: ship.cargo_capacity,
   consumables: ship.consumables,
-  cost: convertToNumber(ship.cost_in_credits) ?? NaN,
-  crew: convertToNumber(ship.crew) ?? NaN,
-  hyperdriveRating: convertToNumber(ship.hyperdrive_rating) ?? NaN,
-  length: convertToNumber(ship.length) || NaN,
+  cost: convertToNumber(ship.cost_in_credits) ?? Number.NaN,
+  crew: convertToNumber(ship.crew) ?? Number.NaN,
+  hyperdriveRating: convertToNumber(ship.hyperdrive_rating) ?? Number.NaN,
+  length: convertToNumber(ship.length) || Number.NaN,
   manufacturer: ship.manufacturer,
   maxAtmospheringSpeed: convertToNumber(ship.max_atmosphering_speed),
-  MGLT: convertToNumber(ship.MGLT) ?? NaN,
+  MGLT: convertToNumber(ship.MGLT) ?? Number.NaN,
   model: ship.model,
-  passengers: convertToNumber(ship.passengers) ?? NaN,
+  passengers: convertToNumber(ship.passengers) ?? Number.NaN,
   pilots: ship.pilots?.map(urlToId) || [],
   starshipClass: ship.starship_class
 });
@@ -110,9 +110,9 @@ export const convertEntities = <T extends Swapi.Entity, P extends Entity>(
   convert: (e: T) => P,
   page: number = 1
 ): EntitiesPage<P> => {
-  if (page < 1 || !Number.isInteger(page)) throw Error(`Invalid page value ${page}: page should be intger > 0!`);
+  if (page < 1 || !Number.isInteger(page)) throw new Error(`Invalid page value ${page}: page should be intger > 0!`);
   if (entities.count < 0 || !Number.isInteger(entities.count))
-    throw Error(
+    throw new Error(
       `Invalid entities count ${entities.count} input page ${page}: entities count should be positive integer!`
     );
   return {

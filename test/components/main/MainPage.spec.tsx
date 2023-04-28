@@ -1,3 +1,4 @@
+import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
 import { MainPage } from "../../../src/components/main/MainPage";
@@ -9,6 +10,6 @@ describe("MainPage", () => {
 
   it("renders loader at the beginning", () => {
     render(<MainPage />);
-    expect(screen.queryAllByText("loading")).toHaveLength(1);
-  })
+    expect(screen.queryByText("loading")).toBeInTheDocument();
+  });
 });

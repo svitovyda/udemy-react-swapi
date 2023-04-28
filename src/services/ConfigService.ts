@@ -1,4 +1,4 @@
-import ConfigFile from "../../config/config.json";
+import configJson from "config";
 
 export interface Config {
   baseUrl: string;
@@ -6,22 +6,22 @@ export interface Config {
   personAssetsUrl?: string;
   starshipAssetsUrl?: string;
 }
-export class ConfigService {
-  static getConfig(): Config {
+export const ConfigService = {
+  getConfig(): Config {
     return {
-      baseUrl: ConfigFile.serverUrl ?? "swapi.dev",
+      baseUrl: configJson.serverUrl ?? "swapi.dev",
       planetAssetsUrl:
-        ConfigFile.imagesBaseUrl && ConfigFile.planetAssets
-          ? `http://${ConfigFile.imagesBaseUrl}/${ConfigFile.planetAssets}`
+        configJson.imagesBaseUrl && configJson.planetAssets
+          ? `http://${configJson.imagesBaseUrl}/${configJson.planetAssets}`
           : "",
       personAssetsUrl:
-        ConfigFile.imagesBaseUrl && ConfigFile.planetAssets
-          ? `http://${ConfigFile.imagesBaseUrl}/${ConfigFile.personAssets}`
+        configJson.imagesBaseUrl && configJson.planetAssets
+          ? `http://${configJson.imagesBaseUrl}/${configJson.personAssets}`
           : "",
       starshipAssetsUrl:
-        ConfigFile.imagesBaseUrl && ConfigFile.planetAssets
-          ? `http://${ConfigFile.imagesBaseUrl}/${ConfigFile.starshipAssets}`
+        configJson.imagesBaseUrl && configJson.planetAssets
+          ? `http://${configJson.imagesBaseUrl}/${configJson.starshipAssets}`
           : ""
     };
   }
-}
+};

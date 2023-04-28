@@ -1,9 +1,9 @@
-import * as React from "react";
 import styled from "@emotion/styled";
 import { rgba } from "emotion-rgba";
+import * as React from "react";
 import { Link } from "react-router-dom";
-import { Paginator } from "../general/Paginator";
 import { ShortPage } from "../../services/DataProvider";
+import { Paginator } from "../general/Paginator";
 
 const Container = styled.div({
   display: "flex",
@@ -69,38 +69,41 @@ const EntityLinkElement = styled(LinkElement)({
   }
 });
 
-export interface EntitiesListViewProps {
+export interface EntitiesListViewProperties {
   entityUrlId: string;
   data: ShortPage;
 }
 
 const renderPageLink =
   (entityId: string) =>
-    (page: number, text?: string): React.ReactElement =>
-      <LinkElement to={`/${entityId}/${page}`}>{text ? text : page}</LinkElement>;
+  // eslint-disable-next-line react/display-name
+  (page: number, text?: string): React.ReactElement =>
+    <LinkElement to={`/${entityId}/${page}`}>{text ? text : page}</LinkElement>;
 
-export const EntitiesListView: React.FC<EntitiesListViewProps> = (props: EntitiesListViewProps) => {
-  const { entityUrlId: entityId, data } = props;
+export const EntitiesListView: React.FC<EntitiesListViewProperties> = (properties: EntitiesListViewProperties) => {
+  const { entityUrlId: entityId, data } = properties;
 
-  return (<Container>
-    <List>
-      {data.result.map((item) => (
-        <EntityLinkElement to={`/${entityId}/details/${item.id}`} key={`${entityId}-${item.id}`}>
-          <ListItem>
-            <NameBlock>{item.name}</NameBlock>
-            <FilmsBlock>{item.films.join(", ")}</FilmsBlock>
-          </ListItem>
-        </EntityLinkElement>
-      ))}
-    </List>
-    <Paginator
-      renderLink={renderPageLink(entityId)}
-      min={1}
-      currentPage={data.page}
-      next={data.next}
-      previous={data.previous}
-    />
-  </Container>);
+  return (
+    <Container>
+      <List>
+        {data.result.map((item) => (
+          <EntityLinkElement to={`/${entityId}/details/${item.id}`} key={`${entityId}-${item.id}`}>
+            <ListItem>
+              <NameBlock>{item.name}</NameBlock>
+              <FilmsBlock>{item.films.join(", ")}</FilmsBlock>
+            </ListItem>
+          </EntityLinkElement>
+        ))}
+      </List>
+      <Paginator
+        renderLink={renderPageLink(entityId)}
+        min={1}
+        currentPage={data.page}
+        next={data.next}
+        previous={data.previous}
+      />
+    </Container>
+  );
 };
 
 EntitiesListView.displayName = "EntitiesListView";

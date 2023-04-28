@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Planet } from "../../models/entities";
-import { displayNumber, WithDataDetailsProps } from "../entities/utils";
+import { DataProvider } from "../../services/DataProvider";
 import { EntityDetails, EntityDetailsWithFilms } from "../entities/EntityDetails";
 import { EntityDetail } from "../entities/EntityDetailsView";
 import { withData } from "../entities/WithData";
-import { DataProvider } from "../../services/DataProvider";
+import { displayNumber, WithDataDetailsProps as WithDataDetailsProperties } from "../entities/utils";
 import { ConfigContext, DataProviderContext } from "../main/App";
 
 const planetToDetails = async (planet: Planet, dataProvider: DataProvider): Promise<EntityDetail[]> => {
@@ -16,28 +16,39 @@ const planetToDetails = async (planet: Planet, dataProvider: DataProvider): Prom
     { label: "Terrain", value: planet.terrain },
     { label: "Created", value: planet.created.getFullYear().toString() }
   ];
-  return planet.residents.length === 0 ? details : Promise.all(planet.residents.map((r) => dataProvider.getPerson(r)))
-    .then((residents) => [...details, { label: "Residents", value: residents.map((r) => `${r.name} (${r.birthYear})`).join(", ") }])
-}
+  return planet.residents.length === 0
+    ? details
+    : Promise.all(planet.residents.map((r) => dataProvider.getPerson(r))).then((residents) => [
+        ...details,
+        { label: "Residents", value: residents.map((r) => `${r.name} (${r.birthYear})`).join(", ") }
+      ]);
+};
 
-const PlanetRenderer: React.FC<WithDataDetailsProps<Planet>> = (props: WithDataDetailsProps<Planet>) => {
+const PlanetRenderer: React.FC<WithDataDetailsProperties<Planet>> = (properties: WithDataDetailsProperties<Planet>) => {
   const settings = React.useContext(ConfigContext);
   const dataProvider = React.useContext(DataProviderContext);
 
-  const { onData, ...rest } = props;
+  const { onData, ...rest } = properties;
   const { onError, onLoading } = rest;
 
-  const onEntityData = React.useCallback((data: EntityDetailsWithFilms<Planet>) => {
-    onLoading();
-    planetToDetails(data.entity, dataProvider).then((details) => onData({ ...data, detailsToRender: details })).catch(onError);
-  }, [onLoading, dataProvider]);
+  const onEntityData = React.useCallback(
+    (data: EntityDetailsWithFilms<Planet>) => {
+      onLoading();
+      planetToDetails(data.entity, dataProvider)
+        .then((details) => onData({ ...data, detailsToRender: details }))
+        .catch(onError);
+    },
+    [onLoading, dataProvider, onData, onError]
+  );
 
-  return <EntityDetails
-    {...rest}
-    onData={onEntityData}
-    entityFetcher={dataProvider.getPlanet}
-    imgBase={settings.planetAssetsUrl}
-  />;
+  return (
+    <EntityDetails
+      {...rest}
+      onData={onEntityData}
+      entityFetcher={dataProvider.getPlanet}
+      imgBase={settings.planetAssetsUrl}
+    />
+  );
 };
 
 export const PlanetDetails = withData(PlanetRenderer);

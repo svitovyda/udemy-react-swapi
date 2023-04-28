@@ -1,16 +1,13 @@
 import * as React from "react";
 import { Person } from "../../models/entities";
-import { displayNumber, WithDataDetailsProps } from "../entities/utils";
+import { DataProvider } from "../../services/DataProvider";
 import { EntityDetails, EntityDetailsWithFilms } from "../entities/EntityDetails";
 import { EntityDetail } from "../entities/EntityDetailsView";
 import { withData } from "../entities/WithData";
-import { DataProvider } from "../../services/DataProvider";
+import { displayNumber, WithDataDetailsProps as WithDataDetailsProperties } from "../entities/utils";
 import { ConfigContext, DataProviderContext } from "../main/App";
 
-const personToDetails = async (
-  person: Person,
-  dataProvider: DataProvider
-): Promise<EntityDetail[]> => {
+const personToDetails = async (person: Person, dataProvider: DataProvider): Promise<EntityDetail[]> => {
   const details: EntityDetail[] = [
     { label: "Gender", value: person.gender },
     { label: "Height", value: displayNumber(person.height, "Unknown") },
@@ -21,29 +18,37 @@ const personToDetails = async (
   ];
   if (!person.homeworld) return details;
 
-  return dataProvider.getPlanet(person.homeworld)
+  return dataProvider
+    .getPlanet(person.homeworld)
     .then((planet) => [...details, { label: "Home World", value: planet.name }])
     .catch(() => details);
 };
 
-const PersonRenderer: React.FC<WithDataDetailsProps<Person>> = (props: WithDataDetailsProps<Person>) => {
+const PersonRenderer: React.FC<WithDataDetailsProperties<Person>> = (properties: WithDataDetailsProperties<Person>) => {
   const settings = React.useContext(ConfigContext);
   const dataProvider = React.useContext(DataProviderContext);
-  const { onData, ...rest } = props;
+  const { onData, ...rest } = properties;
   const { onError, onLoading } = rest;
 
-  const onEntityData = React.useCallback((data: EntityDetailsWithFilms<Person>) => {
-    onLoading();
-    personToDetails(data.entity, dataProvider).then((details) => onData({ ...data, detailsToRender: details })).catch(onError);
-  }, [onLoading, dataProvider]);
+  const onEntityData = React.useCallback(
+    (data: EntityDetailsWithFilms<Person>) => {
+      onLoading();
+      personToDetails(data.entity, dataProvider)
+        .then((details) => onData({ ...data, detailsToRender: details }))
+        .catch(onError);
+    },
+    [onLoading, dataProvider, onError, onData]
+  );
 
-  return <EntityDetails
-    {...rest}
-    onData={onEntityData}
-    entityFetcher={dataProvider.getPerson}
-    imgBase={settings.personAssetsUrl}
-    showLastModified
-  />;
+  return (
+    <EntityDetails
+      {...rest}
+      onData={onEntityData}
+      entityFetcher={dataProvider.getPerson}
+      imgBase={settings.personAssetsUrl}
+      showLastModified
+    />
+  );
 };
 
 export const PersonDetails = withData(PersonRenderer);

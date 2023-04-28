@@ -6,9 +6,7 @@ const mockSwapi: SwapiService = {
   getPerson: jest.fn(() => Promise.resolve(R.peoplePage1.results[0])),
   getPlanet: jest.fn(() => Promise.resolve(R.planetsPage1.results[0])),
   getStarship: jest.fn(() => Promise.resolve(R.starshipsPage1.results[0])),
-  getFilm: jest.fn((id?: string) =>
-    Promise.resolve(R.films.results.find((f) => f.id === id) ?? R.films.results[0])
-  ),
+  getFilm: jest.fn((id?: string) => Promise.resolve(R.films.results.find((f) => f.id === id) ?? R.films.results[0])),
   getPeople: jest.fn(() => Promise.resolve(R.peoplePage1)),
   getPlanets: jest.fn((page?: number) => {
     if (page && page === 2)
@@ -84,7 +82,7 @@ describe("DataProvider", () => {
     const dataProvider = new DataProvider(mockSwapi);
     await dataProvider.init();
 
-    expect(dataProvider.getPlanets()).resolves.toEqual({
+    await expect(dataProvider.getPlanets()).resolves.toEqual({
       page: 1,
       next: true,
       previous: false,
@@ -113,7 +111,7 @@ describe("DataProvider", () => {
     const dataProvider = new DataProvider(mockSwapi);
     await dataProvider.init();
 
-    expect(dataProvider.getPeople()).resolves.toEqual({
+    await expect(dataProvider.getPeople()).resolves.toEqual({
       page: 1,
       next: true,
       previous: false,
@@ -148,7 +146,7 @@ describe("DataProvider", () => {
     const dataProvider = new DataProvider(mockSwapi);
     await dataProvider.init();
 
-    expect(dataProvider.getStarships()).resolves.toEqual({
+    await expect(dataProvider.getStarships()).resolves.toEqual({
       page: 1,
       next: true,
       previous: false,

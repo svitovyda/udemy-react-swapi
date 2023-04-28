@@ -1,12 +1,12 @@
+import * as M from "../../../src/models/entities";
 import * as C from "../../../src/services/helpers/convert";
 import * as Swapi from "../../../src/services/swapiModels";
-import * as M from "../../../src/models/entities";
-import * as R from "../../__mock__/results";
 import filmsJson from "../../__mock__/films.json";
 import peopleJsonP1 from "../../__mock__/people1.json";
 import peopleJsonP2 from "../../__mock__/people2.json";
 import planetsJsonP1 from "../../__mock__/planets1.json";
 import planetsJsonP2 from "../../__mock__/planets2.json";
+import * as R from "../../__mock__/results";
 import starshipsJsonP1 from "../../__mock__/starships1.json";
 import starshipsJsonP4 from "../../__mock__/starships4.json";
 
@@ -21,35 +21,35 @@ describe("convert Swapi to models helpers", () => {
   });
 
   it("convertToNumber", () => {
-    expect(C.convertToNumber(undefined)).toBeUndefined();
+    expect(C.convertToNumber()).toBeUndefined();
     expect(C.convertToNumber("")).toBeUndefined();
     expect(C.convertToNumber("undefined")).toBeUndefined();
     expect(C.convertToNumber("n/a")).toBeNaN();
     expect(C.convertToNumber("2-3")).toBe(2);
     expect(C.convertToNumber("2,3")).toBe(2.3);
     expect(C.convertToNumber("-12,3")).toBe(-12.3);
-    expect(C.convertToNumber("2000000000000")).toBe(2000000000000);
+    expect(C.convertToNumber("2000000000000")).toBe(2_000_000_000_000);
     expect(C.convertToNumber("#FFAA11")).toBeNaN();
     expect(C.convertToNumber("indefinite")).toBe(Number.MAX_VALUE);
   });
 
   it("urlToPage", () => {
-    const err = "Entities page reference is broken: ";
+    const error = "Entities page reference is broken: ";
     expect(C.urlToPage("https://swapi.dev/api/people/")).toBe(1);
     expect(C.urlToPage("https://swapi.dev/api/people/?page=1")).toBe(1);
     expect(C.urlToPage("http://sw.dev/api/people/?page=5")).toBe(5);
-    expect(() => C.urlToPage("http://sw.dev/api/p/?page=0")).toThrowError(Error(`${err}http://sw.dev/api/p/?page=0`));
-    expect(() => C.urlToPage("http://sw.dev/api/p/?page=-3")).toThrowError(Error(`${err}http://sw.dev/api/p/?page=-3`));
-    expect(() => C.urlToPage("http://s.de/api/p/?page=xwz")).toThrowError(Error(`${err}http://s.de/api/p/?page=xwz`));
-    expect(() => C.urlToPage("www.ttt/api/blah/11")).toThrow(Error(`${err}www.ttt/api/blah/11`));
-    expect(() => C.urlToPage("www.ttt/api/blah/page11")).toThrow(Error(`${err}www.ttt/api/blah/page11`));
-    expect(() => C.urlToPage("www.ttt/api/blah/?page11")).toThrow(Error(`${err}www.ttt/api/blah/?page11`));
-    expect(() => C.urlToPage("www.ttt/api/blah/page=11")).toThrow(Error(`${err}www.ttt/api/blah/page=11`));
-    expect(() => C.urlToPage("www.ttt/api/blah/?page=11/")).toThrow(Error(`${err}www.ttt/api/blah/?page=11/`));
-    expect(() => C.urlToPage("/blah/?page=23")).toThrow(Error(`${err}/blah/?page=23`));
-    expect(() => C.urlToPage("")).toThrow(Error(`${err}`));
-    expect(() => C.urlToPage("http://t.ser.com/b/?page=42")).toThrow(Error(`${err}http://t.ser.com/b/?page=42`));
-    expect(() => C.urlToPage("http://test.com/api/page=24")).toThrow(Error(`${err}http://test.com/api/page=24`));
+    expect(() => C.urlToPage("http://sw.dev/api/p/?page=0")).toThrowError(new Error(`${error}http://sw.dev/api/p/?page=0`));
+    expect(() => C.urlToPage("http://sw.dev/api/p/?page=-3")).toThrowError(new Error(`${error}http://sw.dev/api/p/?page=-3`));
+    expect(() => C.urlToPage("http://s.de/api/p/?page=xwz")).toThrowError(new Error(`${error}http://s.de/api/p/?page=xwz`));
+    expect(() => C.urlToPage("www.ttt/api/blah/11")).toThrow(new Error(`${error}www.ttt/api/blah/11`));
+    expect(() => C.urlToPage("www.ttt/api/blah/page11")).toThrow(new Error(`${error}www.ttt/api/blah/page11`));
+    expect(() => C.urlToPage("www.ttt/api/blah/?page11")).toThrow(new Error(`${error}www.ttt/api/blah/?page11`));
+    expect(() => C.urlToPage("www.ttt/api/blah/page=11")).toThrow(new Error(`${error}www.ttt/api/blah/page=11`));
+    expect(() => C.urlToPage("www.ttt/api/blah/?page=11/")).toThrow(new Error(`${error}www.ttt/api/blah/?page=11/`));
+    expect(() => C.urlToPage("/blah/?page=23")).toThrow(new Error(`${error}/blah/?page=23`));
+    expect(() => C.urlToPage("")).toThrow(new Error(`${error}`));
+    expect(() => C.urlToPage("http://t.ser.com/b/?page=42")).toThrow(new Error(`${error}http://t.ser.com/b/?page=42`));
+    expect(() => C.urlToPage("http://test.com/api/page=24")).toThrow(new Error(`${error}http://test.com/api/page=24`));
   });
 });
 
@@ -90,7 +90,7 @@ describe("convert models", () => {
   });
 
   it("convertEntities", () => {
-    const req: Swapi.EntitiesPage<Swapi.Film> = { count: 6, next: "next/url", previous: "previous/url", results: [] };
+    const request: Swapi.EntitiesPage<Swapi.Film> = { count: 6, next: "next/url", previous: "previous/url", results: [] };
     const res: M.EntitiesPage<M.Film> = { count: 6, page: 3, next: true, previous: true, results: [] };
     expect(C.convertEntities(films, C.convertEntity, 4)).toMatchObject({
       count: 6,
@@ -98,14 +98,14 @@ describe("convert models", () => {
       next: false,
       previous: false
     });
-    expect(C.convertEntities({ ...req }, C.convertEntity, 3)).toMatchObject(res);
-    expect(C.convertEntities({ ...req, next: "" }, C.convertEntity, 3)).toMatchObject({ ...res, next: false });
-    expect(C.convertEntities({ ...req, next: "", previous: "" }, C.convertEntity, 3)).toMatchObject({
+    expect(C.convertEntities({ ...request }, C.convertEntity, 3)).toMatchObject(res);
+    expect(C.convertEntities({ ...request, next: "" }, C.convertEntity, 3)).toMatchObject({ ...res, next: false });
+    expect(C.convertEntities({ ...request, next: "", previous: "" }, C.convertEntity, 3)).toMatchObject({
       ...res,
       next: false,
       previous: false
     });
-    expect(C.convertEntities({ ...req, previous: "" }, C.convertEntity, 3)).toMatchObject({ ...res, previous: false });
+    expect(C.convertEntities({ ...request, previous: "" }, C.convertEntity, 3)).toMatchObject({ ...res, previous: false });
     expect(() => C.convertEntities({ count: 6, next: null, previous: null, results: [] }, C.convertEntity, -3)).toThrow(
       "Invalid page value -3: page should be intger > 0!"
     );

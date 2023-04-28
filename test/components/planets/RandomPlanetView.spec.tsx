@@ -1,6 +1,7 @@
+import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
-import { RandomPlanetView, RandomPlanetViewProps } from "../../../src/components/planets/RandomPlanetView";
+import { RandomPlanetView, RandomPlanetViewProps as RandomPlanetViewProperties } from "../../../src/components/planets/RandomPlanetView";
 import { planetsPage1 } from "../../__mock__/results";
 
 describe("RandomPlanetView", () => {
@@ -11,38 +12,38 @@ describe("RandomPlanetView", () => {
   it("rendered a planet", () => {
     const clickMock = jest.fn();
 
-    const props: RandomPlanetViewProps = {
+    const properties: RandomPlanetViewProperties = {
       planet: planetsPage1.results[0],
       imageUrl: "",
       onShowRanomPlanet: clickMock,
       btnEnabled: true
     };
 
-    render(<RandomPlanetView {...props} />);
-    expect(screen.queryAllByText(planetsPage1.results[0].name)).toHaveLength(1);
-    expect(screen.queryAllByText("200000")).toHaveLength(1);
-    expect(screen.queryAllByText("10465")).toHaveLength(1);
-    expect(screen.queryAllByText("23")).toHaveLength(1);
-    const btn = screen.queryByText("Load Random Planet");
-    expect(btn).toBeTruthy();
-    btn!.click();
+    render(<RandomPlanetView {...properties} />);
+    expect(screen.queryByText(planetsPage1.results[0].name)).toBeInTheDocument();
+    expect(screen.queryByText("200000")).toBeInTheDocument();
+    expect(screen.queryByText("10465")).toBeInTheDocument();
+    expect(screen.queryByText("23")).toBeInTheDocument();
+    const button = screen.queryByText("Load Random Planet");
+    expect(button).toBeTruthy();
+    button!.click();
     expect(clickMock).toBeCalled();
   });
   it("renders disabled button", () => {
     const clickMock = jest.fn();
 
-    const props: RandomPlanetViewProps = {
+    const properties: RandomPlanetViewProperties = {
       planet: planetsPage1.results[0],
       imageUrl: "",
       btnEnabled: false,
       onShowRanomPlanet: clickMock
     };
 
-    render(<RandomPlanetView {...props} />);
-    const btn = screen.queryByText("Load Random Planet")?.closest('button');
-    expect(btn).toBeTruthy();
-    expect(btn?.hasAttribute("disabled")).toBeTruthy();
-    btn!.click();
+    render(<RandomPlanetView {...properties} />);
+    const button = screen.queryByText("Load Random Planet")?.closest("button");
+    expect(button).toBeTruthy();
+    expect(button?.hasAttribute("disabled")).toBeTruthy();
+    button!.click();
     expect(clickMock).not.toBeCalled();
   });
 });

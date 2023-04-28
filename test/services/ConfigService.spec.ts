@@ -1,4 +1,4 @@
-import { ConfigService } from "../../src/services/ConfigService"
+import { ConfigService } from "../../src/services/ConfigService";
 
 describe("ConfigService", () => {
   it("should return Config", () => {
@@ -6,7 +6,7 @@ describe("ConfigService", () => {
       baseUrl: "swapi.dev",
       planetAssetsUrl: "http://starwars-visualguide.com/assets/img/planets",
       personAssetsUrl: "http://starwars-visualguide.com/assets/img/characters",
-      starshipAssetsUrl: "http://starwars-visualguide.com/assets/img/starships",
+      starshipAssetsUrl: "http://starwars-visualguide.com/assets/img/starships"
     });
-  })
+  });
 });

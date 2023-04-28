@@ -1,3 +1,4 @@
+import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
 import { WithLoader } from "../../../src/components/general/WithLoader";
@@ -9,12 +10,12 @@ describe("WithLoader", () => {
 
   it("Shows loader if isLoading, no children", () => {
     render(<WithLoader loading />);
-    expect(screen.queryAllByText("loading")).toHaveLength(1);
+    expect(screen.queryByText("loading")).toBeInTheDocument();
   });
 
   it("Shows no loader if isLoading=false, no children", () => {
     render(<WithLoader loading={false} />);
-    expect(screen.queryAllByText("loading")).toHaveLength(0);
+    expect(screen.queryByText("loading")).not.toBeInTheDocument();
   });
 
   it("Shows content if isLoading=false", () => {
@@ -24,9 +25,9 @@ describe("WithLoader", () => {
         <div>Info</div>
       </WithLoader>
     );
-    expect(screen.queryAllByText("loading")).toHaveLength(0);
-    expect(screen.queryAllByText("Content")).toHaveLength(1);
-    expect(screen.queryAllByText("Info")).toHaveLength(1);
+    expect(screen.queryByText("loading")).not.toBeInTheDocument();
+    expect(screen.queryByText("Content")).toBeInTheDocument();
+    expect(screen.queryByText("Info")).toBeInTheDocument();
   });
 
   it("Shows no content if isLoading", () => {
@@ -36,8 +37,8 @@ describe("WithLoader", () => {
         <div>Info</div>
       </WithLoader>
     );
-    expect(screen.queryAllByText("loading")).toHaveLength(1);
-    expect(screen.queryAllByText("Content")).toHaveLength(0);
-    expect(screen.queryAllByText("Info")).toHaveLength(0);
+    expect(screen.queryByText("loading")).toBeInTheDocument();
+    expect(screen.queryByText("Content")).not.toBeInTheDocument();
+    expect(screen.queryByText("Info")).not.toBeInTheDocument();
   });
 });

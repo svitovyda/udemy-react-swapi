@@ -1,7 +1,8 @@
-import * as React from "react";
+import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
+import * as React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { EntitiesListView, EntitiesListViewProps } from "../../../src/components/entities/EntitiesListView";
+import { EntitiesListView, EntitiesListViewProps as EntitiesListViewProperties } from "../../../src/components/entities/EntitiesListView";
 
 describe("EntityDetailsView", () => {
   it("has displayName", () => {
@@ -9,7 +10,7 @@ describe("EntityDetailsView", () => {
   });
 
   it("render some page", () => {
-    const props: EntitiesListViewProps = {
+    const properties: EntitiesListViewProperties = {
       data: {
         next: true,
         page: 3,
@@ -35,15 +36,19 @@ describe("EntityDetailsView", () => {
       entityUrlId: "testId"
     };
 
-    render(<BrowserRouter><EntitiesListView {...props} /></BrowserRouter>);
-    expect(screen.queryAllByText("Film1, Film2, Film3")).toHaveLength(1);
-    expect(screen.queryAllByText("Film4")).toHaveLength(1);
-    expect(screen.queryAllByText("Film5")).toHaveLength(1);
-    expect(screen.queryAllByText("TestEntity1")).toHaveLength(1);
-    expect(screen.queryAllByText("TestEntity2")).toHaveLength(1);
-    expect(screen.queryAllByText("TestEntity3")).toHaveLength(1);
-    expect(screen.queryAllByText("3")).toHaveLength(1);
-    expect(screen.queryAllByText("<")).toHaveLength(1);
-    expect(screen.queryAllByText(">")).toHaveLength(1);
+    render(
+      <BrowserRouter>
+        <EntitiesListView {...properties} />
+      </BrowserRouter>
+    );
+    expect(screen.queryByText("Film1, Film2, Film3")).toBeInTheDocument();
+    expect(screen.queryByText("Film4")).toBeInTheDocument();
+    expect(screen.queryByText("Film5")).toBeInTheDocument();
+    expect(screen.queryByText("TestEntity1")).toBeInTheDocument();
+    expect(screen.queryByText("TestEntity2")).toBeInTheDocument();
+    expect(screen.queryByText("TestEntity3")).toBeInTheDocument();
+    expect(screen.queryByText("3")).toBeInTheDocument();
+    expect(screen.queryByText("<")).toBeInTheDocument();
+    expect(screen.queryByText(">")).toBeInTheDocument();
   });
 });

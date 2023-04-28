@@ -1,15 +1,15 @@
+import { when } from "jest-when";
 import { Config } from "../../src/services/ConfigService";
 import { SwapiService, RemoteFetcher } from "../../src/services/SwapiService";
-import { when } from "jest-when";
+import * as Swapi from "../../src/services/swapiModels";
 import films from "../__mock__/films.json";
 import peopleJsonP1 from "../__mock__/people1.json";
 import peopleJsonP2 from "../__mock__/people2.json";
 import planetsJsonP1 from "../__mock__/planets1.json";
 import planetsJsonP2 from "../__mock__/planets2.json";
+import * as R from "../__mock__/results";
 import starshipsJsonP1 from "../__mock__/starships1.json";
 import starshipsJsonP4 from "../__mock__/starships4.json";
-import * as R from "../__mock__/results";
-import * as Swapi from "../../src/services/swapiModels";
 
 const peopleJsonTyped = peopleJsonP1 as any as Swapi.EntitiesPage<Swapi.Person>;
 const planetsJsonTyped = planetsJsonP1 as any as Swapi.EntitiesPage<Swapi.Planet>;
@@ -24,10 +24,10 @@ const mockConfig: Config = {
   personAssetsUrl: "testPersonAssetsUrl",
   planetAssetsUrl: "testPlanetAssetsUrl",
   starshipAssetsUrl: "testStarshipAssetsUrl"
-}
+};
 
 describe("SwapiService", () => {
-  const service =  new SwapiService(mockConfig, mockFetcher);
+  const service = new SwapiService(mockConfig, mockFetcher);
 
   beforeAll(() => {
     const spied = jest.spyOn(mockFetcher, "get");

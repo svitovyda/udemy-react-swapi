@@ -1,6 +1,6 @@
-import React from "react";
-import { rgba } from "emotion-rgba";
 import styled from "@emotion/styled";
+import { rgba } from "emotion-rgba";
+import React from "react";
 
 export interface EntityDetail {
   label: string;
@@ -77,29 +77,29 @@ const Image = styled.img({
   objectFit: "cover"
 });
 
-export interface EntityDetailsViewProps {
+export interface EntityDetailsViewProperties {
   caption?: string;
   details: EntityDetail[];
   lastEdited?: Date;
   img?: string;
 }
 
-export const EntityDetailsView: React.FC<EntityDetailsViewProps> = (props: EntityDetailsViewProps) => {
+export const EntityDetailsView: React.FC<EntityDetailsViewProperties> = (properties: EntityDetailsViewProperties) => {
   return (
     <Container>
-      {props.caption && <EntityName>{props.caption}</EntityName>}
-      {props.img && <Image src={props.img} alt={props.caption} />}
+      {properties.caption && <EntityName>{properties.caption}</EntityName>}
+      {properties.img && <Image src={properties.img} alt={properties.caption} />}
       <List>
-        {props.details.map((d) => (
+        {properties.details.map((d) => (
           <ListItem key={d.label}>
             <LabelInfoBlock>{d.label}</LabelInfoBlock>
             <ValueInfoBlock>{d.value}</ValueInfoBlock>
           </ListItem>
         ))}
-        {props.lastEdited && (
+        {properties.lastEdited && (
           <ListItem key={"lastEdited"}>
             <DateLabelBlock>Last Edited</DateLabelBlock>
-            <DateInfoBlock>{props.lastEdited.toISOString()}</DateInfoBlock>
+            <DateInfoBlock>{properties.lastEdited.toISOString()}</DateInfoBlock>
           </ListItem>
         )}
       </List>

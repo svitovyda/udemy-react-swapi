@@ -1,21 +1,17 @@
 import * as React from "react";
-import { WithDataListProps } from "../entities/utils";
-import { withData } from "../entities/WithData";
 import { EntitiesListView } from "../entities/EntitiesListView";
+import { withData } from "../entities/WithData";
 import { loadPageController } from "../entities/hooks";
+import { WithDataListProps as WithDataListProperties } from "../entities/utils";
 import { DataProviderContext } from "../main/App";
 
-const Planets: React.FC<WithDataListProps> = (props: WithDataListProps) => {
+const Planets: React.FC<WithDataListProperties> = (properties: WithDataListProperties) => {
   const dataProvider = React.useContext(DataProviderContext);
-  const { data } = props;
+  const { data } = properties;
 
-  loadPageController(dataProvider.getPlanets, props);
+  loadPageController(dataProvider.getPlanets, properties);
 
-  return (
-    <>
-      {(!!data && <EntitiesListView data={data} entityUrlId="planets" />)}
-    </>
-  );
+  return <>{!!data && <EntitiesListView data={data} entityUrlId="planets" />}</>;
 };
 Planets.displayName = "Planets";
 

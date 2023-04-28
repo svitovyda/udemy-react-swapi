@@ -1,5 +1,5 @@
-import * as React from "react";
 import styled from "@emotion/styled";
+import * as React from "react";
 
 const PaginatorContainer = styled.div({
   display: "flex",
@@ -17,7 +17,7 @@ const PaginatorPassiveElement = styled(PaginationElement)({
   color: "grey"
 });
 
-export interface PaginatorProps {
+export interface PaginatorProperties {
   currentPage: number;
   next: boolean;
   previous: boolean;
@@ -26,20 +26,20 @@ export interface PaginatorProps {
   renderLink: (page: number, text?: string) => React.ReactElement;
 }
 
-export const Paginator: React.FC<PaginatorProps> = React.memo((props: PaginatorProps) => {
-  const { currentPage, renderLink, previous, next } = props;
-  const renderFirst = Number.isSafeInteger(props.min);
-  const min: number = renderFirst ? Number(props.min) : Number.NEGATIVE_INFINITY;
-  const renderLast = Number.isSafeInteger(props.max);
-  const max: number = renderLast ? Number(props.max) : Number.POSITIVE_INFINITY;
-  const renderPrev = previous && min + 1 < currentPage;
+export const Paginator: React.FC<PaginatorProperties> = React.memo((properties: PaginatorProperties) => {
+  const { currentPage, renderLink, previous, next } = properties;
+  const renderFirst = Number.isSafeInteger(properties.min);
+  const min: number = renderFirst ? Number(properties.min) : Number.NEGATIVE_INFINITY;
+  const renderLast = Number.isSafeInteger(properties.max);
+  const max: number = renderLast ? Number(properties.max) : Number.POSITIVE_INFINITY;
+  const renderPrevious = previous && min + 1 < currentPage;
   const renderNext = next && max - 1 > currentPage;
 
   return (
     <PaginatorContainer>
       {renderFirst && currentPage !== min && <PaginationElement>{renderLink(min)}</PaginationElement>}
       {renderFirst && currentPage > min + 1 && <PaginatorPassiveElement>...</PaginatorPassiveElement>}
-      {renderPrev && <PaginationElement>{renderLink(currentPage - 1, "<")}</PaginationElement>}
+      {renderPrevious && <PaginationElement>{renderLink(currentPage - 1, "<")}</PaginationElement>}
       <PaginatorPassiveElement>{currentPage}</PaginatorPassiveElement>
       {renderNext && <PaginationElement>{renderLink(currentPage + 1, ">")}</PaginationElement>}
       {renderLast && currentPage < max - 1 && <PaginatorPassiveElement>...</PaginatorPassiveElement>}

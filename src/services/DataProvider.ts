@@ -1,6 +1,6 @@
 import { EntitiesPage, Entity, Film, PartOfFilm, Person, Planet, Starship } from "../models/entities";
-import { Cache } from "./helpers/Cache";
 import { SwapiService } from "./SwapiService";
+import { Cache } from "./helpers/Cache";
 
 const PLANETS_MAX = 100;
 const FILMS_MAX = 100;
@@ -43,7 +43,7 @@ export class DataProvider {
 
   getPagesTillMax = async <T extends Entity>(
     max: number,
-    func: (page?: number) => Promise<EntitiesPage<T>>
+    function_: (page?: number) => Promise<EntitiesPage<T>>
   ): Promise<EntitiesWithInfo<T>> => {
     interface PagesAggr {
       previous: EntitiesPage<T>;
@@ -54,12 +54,12 @@ export class DataProvider {
     const recursiveFunction = async (aggr: PagesAggr): Promise<EntitiesWithInfo<T>> => {
       if (!aggr.previous.next || aggr.entities.length >= max)
         return { entities: aggr.entities.slice(0, max), count: aggr.count };
-      return func(aggr.previous.page + 1).then((page) =>
+      return function_(aggr.previous.page + 1).then((page) =>
         recursiveFunction({ previous: page, entities: [...aggr.entities, ...page.results], count: aggr.count })
       );
     };
 
-    return await func()
+    return await function_()
       .then<PagesAggr>((page) => ({ previous: page, entities: page.results, count: page.count }))
       .then(recursiveFunction);
   };
@@ -68,24 +68,24 @@ export class DataProvider {
     await Promise.all([
       this.getPagesTillMax(FILMS_MAX, this.swapiService.getFilms).then((films) => {
         this.filmsCount = films.count;
-        films.entities.forEach((f) => this.films.add(f.id, f));
+        for (const f of films.entities) this.films.add(f.id, f);
       }),
 
       this.getPagesTillMax(PLANETS_MAX, this.swapiService.getPlanets).then((planets) => {
         this.planetsCount = planets.count;
-        planets.entities.forEach((p) => this.planets.add(p.id, p));
+        for (const p of planets.entities) this.planets.add(p.id, p);
       }),
 
       this.swapiService.getPeople().then((people) => {
         this.peopleCount = people.count;
-        people.results.forEach((p) => this.people.add(p.id, p));
+        for (const p of people.results) this.people.add(p.id, p);
       }),
 
       this.swapiService.getStarships().then((ships) => {
         this.starshipsCount = ships.count;
-        ships.results.forEach((s) => this.starships.add(s.id, s));
+        for (const s of ships.results) this.starships.add(s.id, s);
       })
-    ])
+    ]);
   };
 
   protected getEntity = async <T extends Entity>(
@@ -101,7 +101,7 @@ export class DataProvider {
   protected cachePage =
     <T extends Entity>(cache: Cache<T>) =>
     (page: EntitiesPage<T>) => {
-      page.results.forEach((e) => cache.add(e.id, e));
+      for (const e of page.results) cache.add(e.id, e);
       return page;
     };
 
@@ -110,8 +110,8 @@ export class DataProvider {
   protected entityToShort = async (entity: PartOfFilm): Promise<ShortEntity> =>
     this.getFilmsForEntity(entity)
       .then((a) => a.map((f) => `${f.name} (${f.releaseDate.getFullYear()})`))
-      .catch((e) => {
-        console.error(e);
+      .catch((error) => {
+        console.error(error);
         return [];
       })
       .then((films) => ({

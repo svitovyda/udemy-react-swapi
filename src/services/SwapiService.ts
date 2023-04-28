@@ -1,3 +1,4 @@
+import * as Model from "../models/entities";
 import { Config } from "./ConfigService";
 import {
   convertPerson,
@@ -10,7 +11,6 @@ import {
   convertFilm
 } from "./helpers/convert";
 import { Entity, Person, Planet, Starship, EntitiesPage, Film } from "./swapiModels";
-import * as Model from "../models/entities";
 
 export interface RemoteFetcher {
   get: <T>(url: string) => Promise<T>;
@@ -38,8 +38,8 @@ export class SwapiService {
     this.baseUrl = config.baseUrl;
   }
 
-  protected getResource = async <T>(props: string): Promise<T> => {
-    const url = `http://${this.baseUrl}/api/${props}`;
+  protected getResource = async <T>(properties: string): Promise<T> => {
+    const url = `http://${this.baseUrl}/api/${properties}`;
     return this.fetcher.get<T>(url);
   };
 
@@ -55,8 +55,8 @@ export class SwapiService {
     this.getEntityById<Starship>("starships", id).then(convertStarship);
 
   protected getPage = async <T extends Entity>(entity: string, page: number = 1): Promise<EntitiesPage<T>> => {
-    const pageProp = page !== 1 ? `?page=${page}` : "";
-    return await this.getResource<EntitiesPage<T>>(`${entity}/${pageProp}`);
+    const pageProperty = page === 1 ? "" : `?page=${page}`;
+    return await this.getResource<EntitiesPage<T>>(`${entity}/${pageProperty}`);
   };
 
   getFilm = async (id: string): Promise<Model.Film> => this.getEntityById<Film>("films", id).then(convertFilm);

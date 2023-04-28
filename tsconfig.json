@@ -1,13 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Create 0 React App",
+  "display": "SWAPI React App",
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "es6"],
-    "module": "commonjs",
+    "module": "ES2022",
     "target": "es5",
     "rootDir": ".",
     "outDir": "./lib/",
-
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -24,6 +23,7 @@
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
     "exactOptionalPropertyTypes": false,
+    "emitDecoratorMetadata": true,
     "noFallthroughCasesInSwitch": false,
     "noImplicitOverride": true,
     "noImplicitReturns": true,

@@ -1,8 +1,8 @@
-import * as React from "react";
 import styled from "@emotion/styled";
+import * as React from "react";
 import { Planet } from "../../models/entities";
-import { displayNumber } from "../entities/utils";
 import { EntityDetailsView, EntityDetail } from "../entities/EntityDetailsView";
+import { displayNumber } from "../entities/utils";
 
 const Container = styled.div({
   display: "flex",
@@ -45,15 +45,15 @@ const PlanetImage = styled.img({
   objectFit: "cover"
 });
 
-export interface RandomPlanetViewProps {
+export interface RandomPlanetViewProperties {
   planet?: Planet;
   imageUrl?: string;
   btnEnabled: boolean;
   onShowRanomPlanet?: () => void;
 }
 
-export const RandomPlanetView: React.FC<RandomPlanetViewProps> = (props: RandomPlanetViewProps) => {
-  const { btnEnabled, planet, imageUrl, onShowRanomPlanet } = props;
+export const RandomPlanetView: React.FC<RandomPlanetViewProperties> = (properties: RandomPlanetViewProperties) => {
+  const { btnEnabled, planet, imageUrl, onShowRanomPlanet } = properties;
 
   const onButtonClick = React.useCallback(() => {
     if (onShowRanomPlanet) onShowRanomPlanet();

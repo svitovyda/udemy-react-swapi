@@ -1,21 +1,17 @@
 import * as React from "react";
 import { EntitiesListView } from "../entities/EntitiesListView";
-import { loadPageController } from "../entities/hooks";
-import { WithDataListProps } from "../entities/utils";
 import { withData } from "../entities/WithData";
+import { loadPageController } from "../entities/hooks";
+import { WithDataListProps as WithDataListProperties } from "../entities/utils";
 import { DataProviderContext } from "../main/App";
 
-const People: React.FC<WithDataListProps> = (props: WithDataListProps) => {
+const People: React.FC<WithDataListProperties> = (properties: WithDataListProperties) => {
   const dataProvider = React.useContext(DataProviderContext);
-  const { data } = props;
+  const { data } = properties;
 
-  loadPageController(dataProvider.getPeople, props);
+  loadPageController(dataProvider.getPeople, properties);
 
-  return (
-    <>
-      {(!!data && <EntitiesListView data={data} entityUrlId="people" />)}
-    </>
-  );
+  return <>{!!data && <EntitiesListView data={data} entityUrlId="people" />}</>;
 };
 People.displayName = "People";
 
