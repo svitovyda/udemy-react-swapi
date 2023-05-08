@@ -1,5 +1,12 @@
 module.exports = {
-  extends: ["eslint:recommended", "plugin:react/recommended", "prettier", "plugin:react-hooks/recommended", "react-app"],
+  root: true,
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "plugin:react-hooks/recommended",
+    "react-app"
+  ],
   rules: {
     "arrow-parens": "error",
     "jest/no-disabled-tests": "warn",

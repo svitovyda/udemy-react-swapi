@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { rgba } from "emotion-rgba";
-import React from "react";
+import * as React from "react";
 
 export interface EntityDetail {
   label: string;

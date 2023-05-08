@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { ErrorIndicator } from "./ErrorIndicator";
 
 export interface WithErrorProperties extends React.HTMLAttributes<HTMLElement> {

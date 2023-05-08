@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
-import { RandomPlanetView, RandomPlanetViewProps as RandomPlanetViewProperties } from "../../../src/components/planets/RandomPlanetView";
+import { RandomPlanetView, RandomPlanetViewProperties } from "../../../src/components/planets/RandomPlanetView";
 import { planetsPage1 } from "../../__mock__/results";
 
 describe("RandomPlanetView", () => {
@@ -20,7 +20,7 @@ describe("RandomPlanetView", () => {
     };
 
     render(<RandomPlanetView {...properties} />);
-    expect(screen.queryByText(planetsPage1.results[0].name)).toBeInTheDocument();
+    expect(screen.queryByText(planetsPage1.results[0]!.name)).toBeInTheDocument();
     expect(screen.queryByText("200000")).toBeInTheDocument();
     expect(screen.queryByText("10465")).toBeInTheDocument();
     expect(screen.queryByText("23")).toBeInTheDocument();

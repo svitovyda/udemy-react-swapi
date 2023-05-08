@@ -4,7 +4,7 @@ import * as Swapi from "../swapiModels";
 export const urlToId = (url: string): string => {
   const match = url.match(/^.+\/api\/\w+\/(\d+)\//);
   if (!match || match?.length !== 2) throw new Error(`Entities reference is broken: ${url}`);
-  return match[1];
+  return match[1]!;
 };
 
 export const urlToPage = (url: string): number => {

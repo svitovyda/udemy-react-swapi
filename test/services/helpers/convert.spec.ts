@@ -38,9 +38,15 @@ describe("convert Swapi to models helpers", () => {
     expect(C.urlToPage("https://swapi.dev/api/people/")).toBe(1);
     expect(C.urlToPage("https://swapi.dev/api/people/?page=1")).toBe(1);
     expect(C.urlToPage("http://sw.dev/api/people/?page=5")).toBe(5);
-    expect(() => C.urlToPage("http://sw.dev/api/p/?page=0")).toThrowError(new Error(`${error}http://sw.dev/api/p/?page=0`));
-    expect(() => C.urlToPage("http://sw.dev/api/p/?page=-3")).toThrowError(new Error(`${error}http://sw.dev/api/p/?page=-3`));
-    expect(() => C.urlToPage("http://s.de/api/p/?page=xwz")).toThrowError(new Error(`${error}http://s.de/api/p/?page=xwz`));
+    expect(() => C.urlToPage("http://sw.dev/api/p/?page=0")).toThrowError(
+      new Error(`${error}http://sw.dev/api/p/?page=0`)
+    );
+    expect(() => C.urlToPage("http://sw.dev/api/p/?page=-3")).toThrowError(
+      new Error(`${error}http://sw.dev/api/p/?page=-3`)
+    );
+    expect(() => C.urlToPage("http://s.de/api/p/?page=xwz")).toThrowError(
+      new Error(`${error}http://s.de/api/p/?page=xwz`)
+    );
     expect(() => C.urlToPage("www.ttt/api/blah/11")).toThrow(new Error(`${error}www.ttt/api/blah/11`));
     expect(() => C.urlToPage("www.ttt/api/blah/page11")).toThrow(new Error(`${error}www.ttt/api/blah/page11`));
     expect(() => C.urlToPage("www.ttt/api/blah/?page11")).toThrow(new Error(`${error}www.ttt/api/blah/?page11`));
@@ -90,7 +96,12 @@ describe("convert models", () => {
   });
 
   it("convertEntities", () => {
-    const request: Swapi.EntitiesPage<Swapi.Film> = { count: 6, next: "next/url", previous: "previous/url", results: [] };
+    const request: Swapi.EntitiesPage<Swapi.Film> = {
+      count: 6,
+      next: "next/url",
+      previous: "previous/url",
+      results: []
+    };
     const res: M.EntitiesPage<M.Film> = { count: 6, page: 3, next: true, previous: true, results: [] };
     expect(C.convertEntities(films, C.convertEntity, 4)).toMatchObject({
       count: 6,
@@ -105,7 +116,10 @@ describe("convert models", () => {
       next: false,
       previous: false
     });
-    expect(C.convertEntities({ ...request, previous: "" }, C.convertEntity, 3)).toMatchObject({ ...res, previous: false });
+    expect(C.convertEntities({ ...request, previous: "" }, C.convertEntity, 3)).toMatchObject({
+      ...res,
+      previous: false
+    });
     expect(() => C.convertEntities({ count: 6, next: null, previous: null, results: [] }, C.convertEntity, -3)).toThrow(
       "Invalid page value -3: page should be intger > 0!"
     );

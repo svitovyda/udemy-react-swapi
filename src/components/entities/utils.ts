@@ -9,12 +9,12 @@ export interface Data<T> {
   error?: Error;
 }
 
-export interface RoutePageProperties {
-  page?: string;
+export interface RoutePageProperties extends Record<string, string> {
+  page: string;
 }
 
-export interface RouteEntityProperties {
-  id?: string;
+export interface RouteEntityProperties extends Record<string, string> {
+  id: string;
 }
 
 export const displayNumber = (number_: number | undefined, stringOnZero?: string): string => {

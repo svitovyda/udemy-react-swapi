@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { LoaderAnimation } from "./LoaderAnimation";
 
 export interface WithLoaderProperties extends React.HTMLAttributes<HTMLElement> {

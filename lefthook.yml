@@ -7,7 +7,7 @@ pre-push:
     eslint:
       run: yarn lint:check
     test:
-      run: yarn test
+      run: yarn test --silent
 
 pre-commit:
   commands:

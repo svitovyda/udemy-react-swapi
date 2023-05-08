@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { ShortPage } from "../../services/DataProvider";
 import {
   pageToNumber,
-  RouteEntityProps as RouteEntityProperties,
-  RoutePageProps as RoutePageProperties,
+  RouteEntityProperties,
+  RoutePageProperties,
   validatePage,
   WithDataListProps as WithDataListProperties
 } from "./utils";

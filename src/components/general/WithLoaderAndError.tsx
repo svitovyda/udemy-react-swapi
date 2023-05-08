@@ -1,6 +1,6 @@
-import React from "react";
+import * as React from "react";
 import { WithError } from "./WithError";
-import { WithLoader } from "./withLoader";
+import { WithLoader } from "./WithLoader";
 
 export interface WithLoaderAndErrorProperties extends React.HTMLAttributes<HTMLElement> {
   loading?: boolean;

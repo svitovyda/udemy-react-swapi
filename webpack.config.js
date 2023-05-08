@@ -27,14 +27,7 @@ const createBaseConfig = () => ({
         test: /\.(js|ts)x?$/,
         loader: "babel-loader",
         exclude: /node_modules/,
-        resolve: { fullySpecified: false },
-        options: {
-          presets: [
-            ["@babel/preset-env", { debug: true }],
-            "@babel/preset-react",
-            ["@babel/preset-typescript", { allowNamespaces: true }]
-          ]
-        }
+        resolve: { fullySpecified: false }
       },
       {
         test: /\.svg$/,
@@ -50,7 +43,8 @@ const createBaseConfig = () => ({
       template: "src/index.html",
       filename: "index.html",
       inject: "head",
-      title: environment.ENV_NAME === "production" ? `SWAPI JS client${version}` : `SWAPI JS client ${environment.ENV_NAME}`,
+      title:
+        environment.ENV_NAME === "production" ? `SWAPI JS client${version}` : `SWAPI JS client ${environment.ENV_NAME}`,
       favicon: "src/favicon.ico",
       meta: {
         viewport: "width=device-width, initial-scale=1.0, shrink-to-fit=no",
@@ -73,12 +67,20 @@ const createBaseConfig = () => ({
       config: path.join(__dirname, `config/${environment.ENV_NAME}.json`)
     },
     extensions: [".ts", ".tsx", ".js", ".jsx", ",json"]
+  },
+  optimization: {
+    concatenateModules: true,
+    emitOnErrors: true
   }
 });
 
 const createDevelopmentConfig = () => ({
   mode: "development",
   devtool: "source-map",
+  bail: true,
+  optimization: {
+    emitOnErrors: true
+  },
   devServer: {
     port: 8080,
     hot: true,
@@ -105,7 +107,9 @@ const createDevelopmentConfig = () => ({
 const createProductionConfig = () => ({
   mode: "production",
   devtool: undefined,
+  bail: false,
   optimization: {
+    emitOnErrors: false,
     minimize: true,
     removeAvailableModules: false,
     removeEmptyChunks: false,
@@ -124,4 +128,7 @@ const createProductionConfig = () => ({
   }
 });
 
-module.exports = merge(createBaseConfig(), environment.ENV_NAME === "production" ? createProductionConfig() : createDevelopmentConfig());
+module.exports = merge(
+  createBaseConfig(),
+  environment.ENV_NAME === "production" ? createProductionConfig() : createDevelopmentConfig()
+);

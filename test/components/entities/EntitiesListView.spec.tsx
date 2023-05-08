@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { EntitiesListView, EntitiesListViewProps as EntitiesListViewProperties } from "../../../src/components/entities/EntitiesListView";
+import { EntitiesListView, EntitiesListViewProperties } from "../../../src/components/entities/EntitiesListView";
 
 describe("EntityDetailsView", () => {
   it("has displayName", () => {
