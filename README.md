@@ -21,12 +21,13 @@ possibly Redux.
 - `node v16.10.0`
 - `yarn v1.22.10`
 
-optional - `http-server` `npm` package
+optional - `http-server`, `depcheck` tools
 
 ## Uses
 
 - `react` with `emotion` styling
-- `webpack` module bundler with `ts-loader` for `typescript` compilation
+- `webpack` module bundler with `babel-loader` `preset-typescript` for 
+ `typescript` compilation
 - `yarn` package manager
 - `Lefthook`/`Prettier`/`ESLint` code/formatting checking
 - `jest` unit testing
@@ -38,7 +39,8 @@ optional - `http-server` `npm` package
 
 `yarn start` to run in dev mode
 
-`yarn build` to get the publish version in the `output` folder.
+Set the environment variables `ENV_NAME` and `APP_VERSION` and run `yarn build`
+to get the publish version in the `output` folder. Or run `yarn build:prod`.
 Optional: `npx http-server ./output` and navigate to `http://127.0.0.1:8080` to
 check how production vesion works.
 
