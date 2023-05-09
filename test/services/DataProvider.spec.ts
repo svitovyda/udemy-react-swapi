@@ -72,7 +72,7 @@ describe("DataProvider", () => {
 
     await expect(
       dataProvider.getFilmsForEntity({
-        ...R.planetsPage1.results[0],
+        ...R.planetsPage1.results[0]!,
         films: ["1", "2", "3"]
       })
     ).resolves.toEqual(R.films.results);

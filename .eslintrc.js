@@ -38,5 +38,5 @@ module.exports = {
     sourceType: "module",
     ecmaVersion: 2022
   },
-  plugins: ["react", "@typescript-eslint", "rxjs", "jest", "prettier", "jsx-a11y", "promise"]
+  plugins: ["react", "@typescript-eslint", "jest", "prettier", "jsx-a11y", "promise"]
 };
