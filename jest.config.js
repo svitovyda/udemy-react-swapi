@@ -33,5 +33,10 @@ module.exports = {
   transformIgnorePatterns: ["/node_modules/", "\\.svg\\.[^\\/]+$"],
   fakeTimers: {
     enableGlobally: true
+  },
+  globals: {
+    "ts-jest": {
+      tsConfig: "tsconfig.test.json"
+    }
   }
 };

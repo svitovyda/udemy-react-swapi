@@ -36,11 +36,15 @@ describe("SwapiService", () => {
     when(spied)
       .calledWith("http://testBaseUrl/api/films/")
       .mockReturnValue(films as any);
-    when(spied).calledWith("http://testBaseUrl/api/films/?page=2").mockRejectedValue(new Error("404, Not found") as never);
+    when(spied)
+      .calledWith("http://testBaseUrl/api/films/?page=2")
+      .mockRejectedValue(new Error("404, Not found") as never);
     when(spied)
       .calledWith("http://testBaseUrl/api/films/1/")
       .mockReturnValue(films.results[0] as any);
-    when(spied).calledWith("http://testBaseUrl/api/films/a/").mockRejectedValue(new Error("404, Not found") as never);
+    when(spied)
+      .calledWith("http://testBaseUrl/api/films/a/")
+      .mockRejectedValue(new Error("404, Not found") as never);
 
     when(spied)
       .calledWith("http://testBaseUrl/api/people/")
@@ -51,7 +55,9 @@ describe("SwapiService", () => {
     when(spied)
       .calledWith("http://testBaseUrl/api/people/1/")
       .mockReturnValue(peopleJsonTyped.results[0] as any);
-    when(spied).calledWith("http://testBaseUrl/api/people/a/").mockRejectedValue(new Error("404, Not found") as never);
+    when(spied)
+      .calledWith("http://testBaseUrl/api/people/a/")
+      .mockRejectedValue(new Error("404, Not found") as never);
 
     when(spied)
       .calledWith("http://testBaseUrl/api/planets/")
@@ -62,7 +68,9 @@ describe("SwapiService", () => {
     when(spied)
       .calledWith("http://testBaseUrl/api/planets/1/")
       .mockReturnValue(planetsJsonTyped.results[0] as any);
-    when(spied).calledWith("http://testBaseUrl/api/planets/a/").mockRejectedValue(new Error("404, Not found") as never);
+    when(spied)
+      .calledWith("http://testBaseUrl/api/planets/a/")
+      .mockRejectedValue(new Error("404, Not found") as never);
 
     when(spied)
       .calledWith("http://testBaseUrl/api/starships/")
@@ -73,7 +81,9 @@ describe("SwapiService", () => {
     when(spied)
       .calledWith("http://testBaseUrl/api/starships/2/")
       .mockReturnValue(starshipsJsonTyped.results[0] as any);
-    when(spied).calledWith("http://testBaseUrl/api/starships/a/").mockRejectedValue(new Error("404, Not found") as never);
+    when(spied)
+      .calledWith("http://testBaseUrl/api/starships/a/")
+      .mockRejectedValue(new Error("404, Not found") as never);
   });
 
   afterAll(() => {});

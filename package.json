@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "author": "Svitovyda <svitovyda@gmail.com>",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "build": "webpack",
