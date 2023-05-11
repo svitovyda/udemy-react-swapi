@@ -1,14 +1,14 @@
 import * as M from "../../../src/models/entities";
 import * as C from "../../../src/services/helpers/convert";
 import * as Swapi from "../../../src/services/swapiModels";
-import filmsJson from "../../__mock__/films.json";
-import peopleJsonP1 from "../../__mock__/people1.json";
-import peopleJsonP2 from "../../__mock__/people2.json";
-import planetsJsonP1 from "../../__mock__/planets1.json";
-import planetsJsonP2 from "../../__mock__/planets2.json";
+import * as filmsJson from "../../__mock__/films.json";
+import * as peopleJsonP1 from "../../__mock__/people1.json";
+import * as peopleJsonP2 from "../../__mock__/people2.json";
+import * as planetsJsonP1 from "../../__mock__/planets1.json";
+import * as planetsJsonP2 from "../../__mock__/planets2.json";
 import * as R from "../../__mock__/results";
-import starshipsJsonP1 from "../../__mock__/starships1.json";
-import starshipsJsonP4 from "../../__mock__/starships4.json";
+import * as starshipsJsonP1 from "../../__mock__/starships1.json";
+import * as starshipsJsonP4 from "../../__mock__/starships4.json";
 
 describe("convert Swapi to models helpers", () => {
   it("urlToId", () => {

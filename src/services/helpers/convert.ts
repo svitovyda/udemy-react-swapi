@@ -20,7 +20,7 @@ export const urlToPage = (url: string): number => {
   return res;
 };
 
-export const convertToNumber = (string_: string | undefined): number | undefined => {
+export const convertToNumber = (string_?: string | undefined): number | undefined => {
   if (string_ === undefined) return undefined;
   let input = string_.toLowerCase().trim();
   if (!input || input === "undefined") return undefined;

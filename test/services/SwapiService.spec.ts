@@ -1,15 +1,16 @@
 import { when } from "jest-when";
-import { Config } from "../../src/services/ConfigService";
-import { SwapiService, RemoteFetcher } from "../../src/services/SwapiService";
+import type { Config } from "../../src/services/ConfigService";
+import { SwapiService } from "../../src/services/SwapiService";
+import type { RemoteFetcher } from "../../src/services/SwapiService";
 import * as Swapi from "../../src/services/swapiModels";
-import films from "../__mock__/films.json";
-import peopleJsonP1 from "../__mock__/people1.json";
-import peopleJsonP2 from "../__mock__/people2.json";
-import planetsJsonP1 from "../__mock__/planets1.json";
-import planetsJsonP2 from "../__mock__/planets2.json";
+import * as films from "../__mock__/films.json";
+import * as peopleJsonP1 from "../__mock__/people1.json";
+import * as peopleJsonP2 from "../__mock__/people2.json";
+import * as planetsJsonP1 from "../__mock__/planets1.json";
+import * as planetsJsonP2 from "../__mock__/planets2.json";
 import * as R from "../__mock__/results";
-import starshipsJsonP1 from "../__mock__/starships1.json";
-import starshipsJsonP4 from "../__mock__/starships4.json";
+import * as starshipsJsonP1 from "../__mock__/starships1.json";
+import * as starshipsJsonP4 from "../__mock__/starships4.json";
 
 const peopleJsonTyped = peopleJsonP1 as any as Swapi.EntitiesPage<Swapi.Person>;
 const planetsJsonTyped = planetsJsonP1 as any as Swapi.EntitiesPage<Swapi.Planet>;
@@ -35,11 +36,11 @@ describe("SwapiService", () => {
     when(spied)
       .calledWith("http://testBaseUrl/api/films/")
       .mockReturnValue(films as any);
-    when(spied).calledWith("http://testBaseUrl/api/films/?page=2").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/films/?page=2").mockRejectedValue(new Error("404, Not found") as never);
     when(spied)
       .calledWith("http://testBaseUrl/api/films/1/")
       .mockReturnValue(films.results[0] as any);
-    when(spied).calledWith("http://testBaseUrl/api/films/a/").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/films/a/").mockRejectedValue(new Error("404, Not found") as never);
 
     when(spied)
       .calledWith("http://testBaseUrl/api/people/")
@@ -50,7 +51,7 @@ describe("SwapiService", () => {
     when(spied)
       .calledWith("http://testBaseUrl/api/people/1/")
       .mockReturnValue(peopleJsonTyped.results[0] as any);
-    when(spied).calledWith("http://testBaseUrl/api/people/a/").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/people/a/").mockRejectedValue(new Error("404, Not found") as never);
 
     when(spied)
       .calledWith("http://testBaseUrl/api/planets/")
@@ -61,7 +62,7 @@ describe("SwapiService", () => {
     when(spied)
       .calledWith("http://testBaseUrl/api/planets/1/")
       .mockReturnValue(planetsJsonTyped.results[0] as any);
-    when(spied).calledWith("http://testBaseUrl/api/planets/a/").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/planets/a/").mockRejectedValue(new Error("404, Not found") as never);
 
     when(spied)
       .calledWith("http://testBaseUrl/api/starships/")
@@ -72,7 +73,7 @@ describe("SwapiService", () => {
     when(spied)
       .calledWith("http://testBaseUrl/api/starships/2/")
       .mockReturnValue(starshipsJsonTyped.results[0] as any);
-    when(spied).calledWith("http://testBaseUrl/api/starships/a/").mockRejectedValue(new Error("404, Not found"));
+    when(spied).calledWith("http://testBaseUrl/api/starships/a/").mockRejectedValue(new Error("404, Not found") as never);
   });
 
   afterAll(() => {});
