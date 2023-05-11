@@ -25,3 +25,4 @@ tsconfig.deep.json
 coverage/
 *junit.xml
 buildinfo.json
+.DS_Store
