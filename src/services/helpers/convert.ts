@@ -1,5 +1,5 @@
-import { Entity, Person, Planet, Starship, EntitiesPage, Film, PartOfFilm } from "../../models/entities";
-import * as Swapi from "../swapiModels";
+import type { Entity, Person, Planet, Starship, EntitiesPage, Film, PartOfFilm } from "../../models/entities";
+import type * as Swapi from "../swapiModels";
 
 export const urlToId = (url: string): string => {
   const match = url.match(/^.+\/api\/\w+\/(\d+)\//);

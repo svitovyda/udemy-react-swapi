@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { rgba } from "emotion-rgba";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { ShortPage } from "../../services/DataProvider";
+import type { ShortPage } from "../../services/DataProvider";
 import { Paginator } from "../general/Paginator";
 
 const Container = styled.div({

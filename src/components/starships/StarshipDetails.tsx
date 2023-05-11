@@ -1,10 +1,12 @@
 import * as React from "react";
-import { Starship } from "../../models/entities";
+import type { Starship } from "../../models/entities";
 import { DataProvider } from "../../services/DataProvider";
-import { EntityDetails, EntityDetailsWithFilms } from "../entities/EntityDetails";
-import { EntityDetail } from "../entities/EntityDetailsView";
+import { EntityDetails } from "../entities/EntityDetails";
+import type { EntityDetailsWithFilms } from "../entities/EntityDetails";
+import type { EntityDetail } from "../entities/EntityDetailsView";
 import { withData } from "../entities/WithData";
-import { displayNumber, WithDataDetailsProps as WithDataDetailsProperties } from "../entities/utils";
+import { displayNumber } from "../entities/utils";
+import type { WithDataDetailsProps as WithDataDetailsProperties } from "../entities/utils";
 import { ConfigContext, DataProviderContext } from "../main/App";
 
 const starshipToDetails = async (starship: Starship, dataProvider: DataProvider): Promise<EntityDetail[]> => {

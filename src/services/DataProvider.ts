@@ -1,4 +1,4 @@
-import { EntitiesPage, Entity, Film, PartOfFilm, Person, Planet, Starship } from "../models/entities";
+import type { EntitiesPage, Entity, Film, PartOfFilm, Person, Planet, Starship } from "../models/entities";
 import { SwapiService } from "./SwapiService";
 import { Cache } from "./helpers/Cache";
 

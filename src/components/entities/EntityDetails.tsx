@@ -1,8 +1,9 @@
 import * as React from "react";
-import { PartOfFilm, Film } from "../../models/entities";
+import type { PartOfFilm, Film } from "../../models/entities";
 import { DataProviderContext } from "../main/App";
-import { EntityDetailsView, EntityDetail } from "./EntityDetailsView";
-import { ElementProps as ElementProperties, WithDataProps as WithDataProperties } from "./WithData";
+import { EntityDetailsView } from "./EntityDetailsView";
+import type { EntityDetail } from "./EntityDetailsView";
+import type { ElementProps as ElementProperties, WithDataProps as WithDataProperties } from "./WithData";
 import { useRouteId } from "./hooks";
 
 export interface EntityDetailsWithFilms<T extends PartOfFilm> {

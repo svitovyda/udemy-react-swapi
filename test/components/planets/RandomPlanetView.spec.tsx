@@ -1,7 +1,8 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
-import { RandomPlanetView, RandomPlanetViewProperties } from "../../../src/components/planets/RandomPlanetView";
+import { RandomPlanetView } from "../../../src/components/planets/RandomPlanetView";
+import type { RandomPlanetViewProperties } from "../../../src/components/planets/RandomPlanetView";
 import { planetsPage1 } from "../../__mock__/results";
 
 describe("RandomPlanetView", () => {

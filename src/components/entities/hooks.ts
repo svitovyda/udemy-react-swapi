@@ -1,13 +1,8 @@
 import * as React from "react";
 import { useParams } from "react-router-dom";
-import { ShortPage } from "../../services/DataProvider";
-import {
-  pageToNumber,
-  RouteEntityProperties,
-  RoutePageProperties,
-  validatePage,
-  WithDataListProps as WithDataListProperties
-} from "./utils";
+import type { ShortPage } from "../../services/DataProvider";
+import { pageToNumber, validatePage } from "./utils";
+import type { RouteEntityProperties, RoutePageProperties, WithDataListProps as WithDataListProperties } from "./utils";
 
 export const useRoutePage = (): { page?: number; error?: Error } => {
   const { page } = useParams<RoutePageProperties>();

@@ -1,7 +1,8 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import * as React from "react";
-import { EntityDetailsView, EntityDetailsViewProperties } from "../../../src/components/entities/EntityDetailsView";
+import type { EntityDetailsViewProperties } from "../../../src/components/entities/EntityDetailsView";
+import { EntityDetailsView } from "../../../src/components/entities/EntityDetailsView";
 
 describe("EntityDetailsView", () => {
   it("has displayName", () => {

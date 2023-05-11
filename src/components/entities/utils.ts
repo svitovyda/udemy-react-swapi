@@ -1,7 +1,7 @@
-import { PartOfFilm } from "../../models/entities";
-import { ShortPage } from "../../services/DataProvider";
-import { EntityDetailsWithFilms } from "./EntityDetails";
-import { ElementProps as ElementProperties, WithDataProps as WithDataProperties } from "./WithData";
+import type { PartOfFilm } from "../../models/entities";
+import type { ShortPage } from "../../services/DataProvider";
+import type { EntityDetailsWithFilms } from "./EntityDetails";
+import type { ElementProps as ElementProperties, WithDataProps as WithDataProperties } from "./WithData";
 
 export interface Data<T> {
   loading?: boolean;

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { WithLoaderAndError } from "../general/WithLoaderAndError";
-import { Data } from "./utils";
+import type { Data } from "./utils";
 
 export type ElementProps = React.HTMLAttributes<HTMLElement>;
 

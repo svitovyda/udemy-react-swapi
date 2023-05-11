@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import * as React from "react";
-import { Planet } from "../../models/entities";
-import { EntityDetailsView, EntityDetail } from "../entities/EntityDetailsView";
+import type { Planet } from "../../models/entities";
+import { EntityDetailsView } from "../entities/EntityDetailsView";
+import type { EntityDetail } from "../entities/EntityDetailsView";
 import { displayNumber } from "../entities/utils";
 
 const Container = styled.div({

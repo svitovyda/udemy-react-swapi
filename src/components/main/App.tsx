@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import * as React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Config, ConfigService } from "../../services/ConfigService";
+import { ConfigService } from "../../services/ConfigService";
+import type { Config } from "../../services/ConfigService";
 import { DataProvider } from "../../services/DataProvider";
 import { SwapiService } from "../../services/SwapiService";
 import { WithLoaderAndError } from "../general/WithLoaderAndError";
@@ -11,7 +12,8 @@ import { PlanetDetails } from "../planets/PlanetDetails";
 import { PlanetsList } from "../planets/PlanetsList";
 import { StarshipDetails } from "../starships/StarshipDetails";
 import { StarshipsList } from "../starships/StarshipsList";
-import { Header, HeaderItem } from "./Header";
+import { Header } from "./Header";
+import type { HeaderItem } from "./Header";
 import { MainPage } from "./MainPage";
 
 const AppContainer = styled.div({

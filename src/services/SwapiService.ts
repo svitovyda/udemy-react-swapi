@@ -1,5 +1,5 @@
 import * as Model from "../models/entities";
-import { Config } from "./ConfigService";
+import type { Config } from "./ConfigService";
 import {
   convertPerson,
   convertPlanet,
@@ -10,7 +10,7 @@ import {
   convertFilms,
   convertFilm
 } from "./helpers/convert";
-import { Entity, Person, Planet, Starship, EntitiesPage, Film } from "./swapiModels";
+import type { Entity, Person, Planet, Starship, EntitiesPage, Film } from "./swapiModels";
 
 export interface RemoteFetcher {
   get: <T>(url: string) => Promise<T>;

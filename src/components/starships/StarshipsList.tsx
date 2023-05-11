@@ -2,7 +2,7 @@ import * as React from "react";
 import { EntitiesListView } from "../entities/EntitiesListView";
 import { withData } from "../entities/WithData";
 import { loadPageController } from "../entities/hooks";
-import { WithDataListProps as WithDataListProperties } from "../entities/utils";
+import type { WithDataListProps as WithDataListProperties } from "../entities/utils";
 import { DataProviderContext } from "../main/App";
 
 const Starships: React.FC<WithDataListProperties> = (properties: WithDataListProperties) => {

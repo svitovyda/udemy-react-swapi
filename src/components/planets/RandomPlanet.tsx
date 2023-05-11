@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Planet } from "../../models/entities";
+import type { Planet } from "../../models/entities";
 import { DataProvider } from "../../services/DataProvider";
-import { ElementProps as ElementProperties, withData, WithDataProps as WithDataProperties } from "../entities/WithData";
+import { withData } from "../entities/WithData";
+import type { ElementProps as ElementProperties, WithDataProps as WithDataProperties } from "../entities/WithData";
 import { ConfigContext, DataProviderContext } from "../main/App";
 import { RandomPlanetView } from "./RandomPlanetView";
 
