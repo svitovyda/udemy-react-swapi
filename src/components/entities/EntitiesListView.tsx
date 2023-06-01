@@ -82,7 +82,6 @@ const renderPageLink =
 
 export const EntitiesListView: React.FC<EntitiesListViewProperties> = (properties: EntitiesListViewProperties) => {
   const { entityUrlId: entityId, data } = properties;
-
   return (
     <Container>
       <List>

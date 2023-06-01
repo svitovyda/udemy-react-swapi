@@ -4,6 +4,7 @@ const { merge } = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const environment = {
   APP_VERSION: "1.0.0",
@@ -38,6 +39,7 @@ const createBaseConfig = () => ({
   target: "web",
   plugins: [
     new webpack.ProgressPlugin(),
+    new ForkTsCheckerWebpackPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "src/index.html",
@@ -62,6 +64,12 @@ const createBaseConfig = () => ({
       "process.env.APP_VERSION": JSON.stringify(environment.APP_VERSION)
     })
   ],
+  watchOptions: {
+    // for some systems, watching many files can result in a lot of CPU or memory usage
+    // https://webpack.js.org/configuration/watch/#watchoptionsignored
+    // don't use this pattern, if you have a monorepo with linked packages
+    ignored: /node_modules/,
+  },
   resolve: {
     alias: {
       config: path.join(__dirname, `config/${environment.ENV_NAME}.json`)
